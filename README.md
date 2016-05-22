@@ -28,7 +28,7 @@ Note:
 * type `bool` is reserved for parameters with no value
 * type `std::string` can be used, but is also used for multiple choices parameters
 
-#### Creating the `Parameters` object
+#### Create the `Parameters` object
 
 When you create the `Parameters` object, you need to pass a `Parameters::config` structure to its constructor. This structure defines all the indentation and dimensions of the help menu. The structure has the following fields:
 * `const int max_terminal_width`: the maximum width that the help menu can take. If the terminal is full screen, using 100% of its width can lead to long lines that are hard to read. This parameter should be around 90-120.
@@ -46,7 +46,7 @@ Then two constructors are available:
 
 When the object is created, you can start defining parameters. This will automatically start building the help menu.
 
-#### Specifying parameters
+#### Specify the parameters
         
 First you can specify a description of your program, and how to use it with the functions:
 * `set_program_description(const std::string&)`
@@ -74,13 +74,13 @@ The order in which you define the parameters will be the same as the order of th
 
 When the menu is ready, you can print it with if you wish with `print_help()`. This function is usually only called when asked by the user though.
         
-#### How to use the parameters
+#### Get the entered values
 
 So far, the parameters have only been defined. After a call to `parse_params()` the command line arguments will be parsed and the parameter's values will be updated from their default value to the one provided by the user. If no exception is thrown so far, the command line is correct. You can then use the following functions to retrieve the parameters' values:
-* `is_spec(const std::string&)` : to know if a simple parameter is specified.
-* `num_val(const std::string&, const int=1)` : to get the n-th numeric value of a numeric parameter.
-* `str_val(const std::string&, const int=1)` : to get the value of a `std::string` parameter.
-* `cho_val(const std::string&)` : to get the value of a multiple choice parameter.
+* `is_spec(const std::string&)`: to know if a simple parameter is specified.
+* `num_val(const std::string&, const int=1)`: to get the n-th numeric value of a numeric parameter. The first one is accessed with index 1, the default value.
+* `str_val(const std::string&, const int=1)`: to get the value of a `std::string` parameter. The first one is accessed with index 1, the default value.
+* `cho_val(const std::string&)`: to get the value of a multiple choice parameter.
 
 #### Catch the following exceptions
 
@@ -102,11 +102,11 @@ They can also mean something was badly coded (by the coder):
 ### Guarantees
 
 These classes guarantees the following things if no exception is thrown:
-* The command line entered by the user only calls defined parameters, with acceptable values
-* The parameters you defined and how you use them is correct
+* The command line entered by the user only calls defined parameters, with acceptable values.
+* The parameters you defined and how you use them is correct.
 
 However, there is no guarantee that:
-* The input parameters specified by the user are compatible. It is possible that a combination of parameters doesn't make sense. This is your task to check this kind of incompatibilities.
+* The input parameters specified by the user are compatible. It is possible that a combination of parameters doesn't make sense in your program. This is your task to check this kind of incompatibilities.
 * The values for the parameters are acceptable for your application. They respect the size of the built-in type, but if you want to make sure a value is not above 100 or below 50, this is also your job.
 
 ***
