@@ -342,6 +342,56 @@ void Parameters::parse_params() {
                             else              std::cerr << "parameter \"" << line_param << "\" expects an integer value, received \"" << arg_value << "\"";
                         }
                     }
+                    if(p->type_name==typeid(long int).name()) {
+                        /* reinterpret with the good type */
+                        Param<long int>* const p_reint = dynamic_cast<Param<long int>* const>(p);
+                        /* update value */
+                        try { p_reint->values[j] = std::stol(arg_value); }
+                        catch(const std::exception& e) {
+                            if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" attend une valeur entière, et a reçu \"" << arg_value << "\"";
+                            else              std::cerr << "parameter \"" << line_param << "\" expects an integer value, received \"" << arg_value << "\"";
+                        }
+                    }
+                    if(p->type_name==typeid(long long int).name()) {
+                        /* reinterpret with the good type */
+                        Param<long long int>* const p_reint = dynamic_cast<Param<long long int>* const>(p);
+                        /* update value */
+                        try { p_reint->values[j] = std::stoll(arg_value); }
+                        catch(const std::exception& e) {
+                            if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" attend une valeur entière, et a reçu \"" << arg_value << "\"";
+                            else              std::cerr << "parameter \"" << line_param << "\" expects an integer value, received \"" << arg_value << "\"";
+                        }
+                    }
+                    if(p->type_name==typeid(unsigned long int).name()) {
+                        /* reinterpret with the good type */
+                        Param<unsigned long int>* const p_reint = dynamic_cast<Param<unsigned long int>* const>(p);
+                        /* update value */
+                        try { p_reint->values[j] = std::stoul(arg_value); }
+                        catch(const std::exception& e) {
+                            if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" attend une valeur entière, et a reçu \"" << arg_value << "\"";
+                            else              std::cerr << "parameter \"" << line_param << "\" expects an integer value, received \"" << arg_value << "\"";
+                        }
+                    }
+                    if(p->type_name==typeid(unsigned long long int).name()) {
+                        /* reinterpret with the good type */
+                        Param<unsigned long long int>* const p_reint = dynamic_cast<Param<unsigned long long int>* const>(p);
+                        /* update value */
+                        try { p_reint->values[j] = std::stoull(arg_value); }
+                        catch(const std::exception& e) {
+                            if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" attend une valeur entière, et a reçu \"" << arg_value << "\"";
+                            else              std::cerr << "parameter \"" << line_param << "\" expects an integer value, received \"" << arg_value << "\"";
+                        }
+                    }
+                    else if(p->type_name==typeid(float).name()) {
+                        /* reinterpret with the good type */
+                        Param<float>* const p_reint = dynamic_cast<Param<float>* const>(p);
+                        /* update value */
+                        try { p_reint->values[j] = std::stof(arg_value); }
+                        catch(const std::exception& e) {
+                            if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" attend une valeur entière, et a reçu \"" << arg_value << "\"";
+                            else              std::cerr << "parameter \"" << line_param << "\" expects an integer value, received \"" << arg_value << "\"";
+                        }
+                    }
                     else if(p->type_name==typeid(double).name()) {
                         /* reinterpret with the good type */
                         Param<double>* const p_reint = dynamic_cast<Param<double>* const>(p);
