@@ -47,7 +47,17 @@ FILE
                       ----------------
  
                          
-    ParamHolder and Param are private nested classes inside class Parameters.
+    ParamHolder and Param are private nested classes inside class Parameters. Also, Parameters
+    defines the following exception classes:
+        - ValueOutOfRangeException: thrown if the value given is not in the range of the built-in type
+        - NotEnoughValuesException: when cmd line doesn't have as many args as required
+        - DecimalExpectedException: when a decimal value is expected but not given
+        - IntegerExpectedException: when an integer value is expected but not given
+        - UndefinedValueException: when trying to access n-th value of a parameter that doesn't exist
+        - UnsupportedParameterTypeException: when the developer tries to create a parameter of unsupported type
+        - DuplicateParameterException: when the developer tries to create a parameter with an existing name
+        - UnknownParameterException: when there is an unknown parameter in the command line
+        - UndefinedParameterException: when the developer tries to retrieve value for a parameter that doesn't exist
     
  
     How to build the menu:
