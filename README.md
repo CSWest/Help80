@@ -6,7 +6,7 @@ The classes defined in this project can be used for parameters parsing and displ
 
 ### Features
 
-Help80 allows you to:
+**Help80** allows you to:
 * parse the command line arguments
 * automatically design a help menu that fits the terminal's width
 * make sure all the input arguments respect the size of the built-in type you assign them to 
@@ -45,9 +45,12 @@ Field | Description
 `const int right_margin_len` | Number of characters between last character on screen and right side of the terminal.
 `LANG lang` (`lang_fr` or `lang_us`) | To adapt to the differences of these two languages. 
 
-Then two constructors are available:
-* `Parameters(const int, char const* const* const, config)`: the help menu width will be the minimum between `max_terminal_width` and the terminal's width.
-* `Parameters(const int, char const* const* const, config, const int)`: the help menu width will be the minimum between `max_terminal_width` and the value given by the constructor's fourth argument.
+Two constructors are available:
+
+Constructor | Use
+----------- | ---
+`Parameters(const int, char const* const* const, config)` | The help menu width will be the minimum between `max_terminal_width` and the terminal's width.
+`Parameters(const int, char const* const* const, config, const int)` | The help menu width will be the minimum between `max_terminal_width` and the value given by the constructor's fourth argument.
 
 When the object is created, you can start defining parameters. This will automatically start building the help menu.
 
