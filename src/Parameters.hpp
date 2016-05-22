@@ -141,26 +141,24 @@ class Parameters {
         static const std::string bold(const std::string&);                                // returns the bold version of str
         static const std::string underline(const std::string&);                           // returns the underlined version of str
     
-        void set_program_description(const std::string&);                                 // sets program description
-        void set_usage(const std::string&);                                               // sets usage
-    
-        /* help menu */
-        template<typename T>
-        void define_num_str_param(const std::string&, const std::vector<std::string>&,
-            const std::vector<T>&, const std::string&, const bool=false);                 // add a parameter with values
-        void define_choice_param(const std::string&, const std::string&,
-            const std::string&, vec_choices, const std::string&, const bool=false);       // add a parameter with choices
-        void define_param(const std::string&, const std::string&);                        // add a parameter with no values
-        void insert_subsection(const std::string&);                                       // prints subsection when printing help menu
-        void print_help(const bool=true, const bool=true) const;                          // print help menu
-    
         /* use of parameters */
         template<typename T>
-        const T           num_val(const std::string&, const int=1) const;                 // return n-th value for parameter. nb starts at 1
-        const std::string str_val(const std::string&, const int=1) const;                 // return n-th value for parameter. nb starts at 1
-        const std::string cho_val(const std::string&)              const;                 // returns choice value
-        const bool        is_def(const std::string&)               const;                 // tells if parameters is defined
-        void              parse_params();                                                 // reads cmd line and store args
+        const T                  num_val(const std::string&, const int=1) const;          // return n-th value for parameter. nb starts at 1
+        const std::string        str_val(const std::string&, const int=1) const;          // return n-th value for parameter. nb starts at 1
+        const std::string        cho_val(const std::string&)              const;          // returns choice value
+        const bool               is_def(const std::string&)               const;          // tells if parameters is defined
+        void                     parse_params();                                          // reads cmd line and store args
+    
+        /* help menu */
+        void                     insert_subsection(const std::string&);                   // prints subsection when printing help menu
+        void                     print_help(const bool=true, const bool=true) const;      // print help menu
+        void                     set_program_description(const std::string&);             // sets program description
+        void                     set_usage(const std::string&);                           // sets usage
+    
+        template<typename T>  // in the order: add a parameter with values, with choices, with no values
+        void define_num_str_param(const std::string&, const std::vector<std::string>&, const std::vector<T>&, const std::string&, const bool=false);
+        void define_choice_param(const std::string&, const std::string&, const std::string&, vec_choices, const std::string&, const bool=false);
+        void define_param(const std::string&, const std::string&);
     
     
     private:
@@ -169,12 +167,11 @@ class Parameters {
         typedef std::map<std::string, vec_choices>        map_choices;
         typedef std::map<size_t, std::string>             map_order;
     
-        void                     print_description() const;                               // print program description
-        void                     print_usage()       const;                               // print usage
-        void                     print_parameters()  const;                               // print list of parameters
-    
         template<typename T>
-        void print_default_value(ParamHolder* const, const bool=false) const;
+        void                     print_def(ParamHolder* const, const bool=false) const;   // prints default value
+        void                     print_description()                             const;   // print program description
+        void                     print_usage()                                   const;   // print usage
+        void                     print_parameters()                              const;   // print list of parameters
     
         Parameters(const Parameters&);
         Parameters& operator=(const Parameters&);
@@ -263,12 +260,10 @@ class Parameters {
 };
 
 
-
-
 /*** template functions definition ***/
 
 template<typename T>
-void Parameters::print_default_value(ParamHolder* const p, const bool add_quotes) const {
+void Parameters::print_def(ParamHolder* const p, const bool add_quotes) const {
     if(typeid(T).name()!=typeid(int                   ).name() && typeid(T).name()!=typeid(long int         ).name()
     && typeid(T).name()!=typeid(long long int         ).name() && typeid(T).name()!=typeid(unsigned long int).name()
     && typeid(T).name()!=typeid(unsigned long long int).name() && typeid(T).name()!=typeid(float            ).name()
@@ -282,8 +277,8 @@ void Parameters::print_default_value(ParamHolder* const p, const bool add_quotes
         if(lang==lang_fr) std::cout << desc_indent << bold("Défaut :");
         else              std::cout << desc_indent << bold("Default:");
         for(std::size_t j=0 ; j<p->nb_values ; j++) {
-            if(!add_quotes) std::cout << " "   << p_reint->def_values[j];         if(j<p->nb_values-1) std::cout << ",";
-            else            std::cout << " \"" << p_reint->def_values[j] << "\""; if(j<p->nb_values-1) std::cout << ",";
+            if(!add_quotes) { std::cout << " "   << p_reint->def_values[j];         if(j<p->nb_values-1) std::cout << ","; }
+            else            { std::cout << " \"" << p_reint->def_values[j] << "\""; if(j<p->nb_values-1) std::cout << ","; }
         }
         std::cout << std::endl;
     }

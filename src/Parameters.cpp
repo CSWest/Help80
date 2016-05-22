@@ -350,15 +350,15 @@ void Parameters::print_parameters() const {
         
         /* print default value */
         if(p->display_default_value) {
-            if(p->type_name==typeid(int).name())                         print_default_value<int>(p);
-            else if(p->type_name==typeid(long int).name())               print_default_value<long int>(p);
-            else if(p->type_name==typeid(long long int).name())          print_default_value<long long int>(p);
-            else if(p->type_name==typeid(unsigned long int).name())      print_default_value<unsigned long int>(p);
-            else if(p->type_name==typeid(unsigned long long int).name()) print_default_value<unsigned long long int>(p);
-            else if(p->type_name==typeid(float).name())                  print_default_value<float>(p);
-            else if(p->type_name==typeid(double).name())                 print_default_value<double>(p);
-            else if(p->type_name==typeid(long double).name())            print_default_value<long double>(p);
-            else if(p->type_name==typeid(std::string).name())            print_default_value<std::string>(p, true);
+            if(p->type_name==typeid(int).name())                         print_def<int>(p);
+            else if(p->type_name==typeid(long int).name())               print_def<long int>(p);
+            else if(p->type_name==typeid(long long int).name())          print_def<long long int>(p);
+            else if(p->type_name==typeid(unsigned long int).name())      print_def<unsigned long int>(p);
+            else if(p->type_name==typeid(unsigned long long int).name()) print_def<unsigned long long int>(p);
+            else if(p->type_name==typeid(float).name())                  print_def<float>(p);
+            else if(p->type_name==typeid(double).name())                 print_def<double>(p);
+            else if(p->type_name==typeid(long double).name())            print_def<long double>(p);
+            else if(p->type_name==typeid(std::string).name())            print_def<std::string>(p, true);
         }
         
         /* skip line */
