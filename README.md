@@ -80,7 +80,7 @@ The file *main.cpp* provides an example of how to use this project. Here is the 
                                                   	     If_there_is_a_long_word that
                                                    	     would fit on the next line,
                                                    	     it goes on the next line.
-                      Default: "second_mode"
+                      	   Default: "second_mode"
 
 
 	SECOND SUBSECTION:
