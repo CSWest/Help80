@@ -88,25 +88,31 @@ So far, the parameters have only been defined. After a call to `parse_params()` 
 
 function | description
 -------- | -----------
-`is_spec(const std::string&)` | to know if a simple parameter is specified.
-`num_val(const std::string&, const int=1)` | to get the n-th numeric value of a numeric parameter. The first one is accessed with index 1, the default value.
-`str_val(const std::string&, const int=1)` | to get the value of a `std::string` parameter. The first one is accessed with index 1, the default value.
-`cho_val(const std::string&)` | to get the value of a multiple choice parameter.
+`is_spec(const std::string&)` | To know if a simple parameter is specified.
+`num_val(const std::string&, const int=1)` | To get the n-th numeric value of a numeric parameter. The first one is accessed with index 1, the default value.
+`str_val(const std::string&, const int=1)` | To get the value of a `std::string` parameter. The first one is accessed with index 1, the default value.
+`cho_val(const std::string&)` | To get the value of a multiple choice parameter.
 
 #### Catch the following exceptions
 
 Along the way, exceptions can be thrown. They mean something bad was entered by the user:
-* `ValueOutOfRangeException`: thrown if the value given by the user is not in the range of the built-in type specified by the coder.
-* `NotEnoughValuesException`: thrown when the command line doesn't have as many arguments as required.
-* `DecimalExpectedException`: thrown when a decimal value is expected but something else is given by the user.
-* `IntegerExpectedException`: thrown when an integer value is expected but something else is given by the user.
-* `UnknownParameterException`: when there is an unknown parameter in the command line.
+
+Exception | Meaning
+--------- | -------
+`ValueOutOfRangeException` | Thrown if the value given by the user is not in the range of the built-in type specified by the coder.
+`NotEnoughValuesException` | Thrown when the command line doesn't have as many arguments as required.
+`DecimalExpectedException` | Thrown when a decimal value is expected but something else is given by the user.
+`IntegerExpectedException` | Thrown when an integer value is expected but something else is given by the user.
+`UnknownParameterException` | Thrown when there is an unknown parameter in the command line.
 
 They can also mean something was badly coded (by the coder):
-* `UndefinedValueException`: when you are trying to access (n+1)-th value of a parameter that only has n values.
-* `UnsupportedParameterTypeException`: when you try to create a parameter of (so far) unsupported type.
-* `DuplicateParameterException`: when you try to create a parameter with an already existing name.
-* `UndefinedParameterException`: when you try to retrieve value for a parameter that doesn't exist.
+
+Exception | Meaning
+--------- | -------
+`UndefinedValueException` | Thrown when you are trying to access (n+1)-th value of a parameter that only has n values.
+`UnsupportedParameterTypeException` | Thrown when you try to create a parameter of (so far) unsupported type.
+`DuplicateParameterException` | Thrown when you try to create a parameter with an already existing name.
+`UndefinedParameterException` | Thrown When you try to retrieve value for a parameter that doesn't exist.
 
 ***
 
