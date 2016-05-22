@@ -30,7 +30,7 @@ LICENSE
 int main(int argc, char** argv) {
 
     /* create object */
-    Parameters::config p_c {90, 2, 13, 5, 3, 10, 2, Parameters::lang_us};
+    Parameters::config p_c {90, 2, 13, 5, 3, 7, 2, Parameters::lang_us};
     Parameters p(argc, argv, p_c);
     
     /* set program description and usage */

@@ -39,7 +39,7 @@ FILE
                           ---------------                 ----------------
                           | ParamHolder |---------------<>|  Parameters  |
                           ---------------                 ----------------
-                                  ^
+                                 ^
                                  |
                                  |    ------------
                          -------------| Template |
@@ -206,6 +206,7 @@ class Parameters {
         std::string               desc_indent;                                             // spaces for indentation of big description
         std::string               choice_indent;                                           // indentation for choices descriptions
         std::string               params_indent;                                           // string of 'params_indent_len' spaces
+        std::string               choice_desc_indent;                                           // string of 'params_indent_len' spaces
     
         /* internal vars */
         const LANG                lang;                                                    // language to print the menu in
