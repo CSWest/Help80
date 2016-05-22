@@ -139,9 +139,9 @@ class Parameters {
     
         struct config {
             const int max_terminal_width;                                                  // max width of terminal
+            const int params_indent_len;                                                   // nb of characters from the left to print param+values
             const int param_to_desc_len;                                                   // nb of spaces between longest param list and descripton
             const int desc_indent_len;                                                     // nb of characters from the left to print description
-            const int params_indent_len;                                                   // nb of characters from the left to print param+values
             const int choice_indent_len;                                                   // indentation for choices descriptions
             const int choice_desc_indent_len;                                              // indentation for choice description
             const int right_margin_len;                                                    // nb of chars from the right of the terminal
@@ -385,6 +385,18 @@ class Parameters {
             private:
                 T min;
                 T max;
+                const std::string description;
+        };
+
+        class UnknownChoiceException: public std::exception {
+            public:
+                UnknownChoiceException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG lang) throw():
+                    description(lang==lang_fr
+                        ? "le choix \"" + arg_value + "\" pour le paramètre \"" + p_param_name + "\" n'est pas disponible dans la fonction \"" + p_function + "\""
+                        : "choice \"" + arg_value + "\" for parameter \"" + p_param_name + "\" is not available in function \"" + p_function + "\"") {}
+                virtual ~UnknownChoiceException() throw() {}
+                virtual const char* what()    const throw() { return description.c_str(); }
+            private:
                 const std::string description;
         };
 

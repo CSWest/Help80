@@ -433,6 +433,19 @@ void Parameters::parse_params() {
                     else if(p->type_name==typeid(std::string).name()) {
                         Param<std::string>* const p_reint = dynamic_cast<Param<std::string>* const>(p);
                         p_reint->values[j] = arg_value;
+                        /* check if available value for multiple choice */
+                        if(choices_params.count(p->name)) {
+                            bool ok = false;
+                            for(const std::pair<std::string, std::string> choice: choices.at(p->name)) {
+                                if(choice.first==arg_value) {
+                                    ok = true;
+                                    break;
+                                }
+                            }
+                            if(!ok) {
+                                throw UnknownChoiceException(p->name, arg_value, "Parameters::parse_params", lang);
+                            }
+                        }
                     }
                 }
                 else {
