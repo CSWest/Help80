@@ -81,10 +81,10 @@ When the menu is ready, you can print it with if you wish with `print_help()`. T
 So far, the parameters have only been defined. After a call to `parse_params()` the command line arguments will be parsed and the parameter's values will be updated from their default value to the one provided by the user. If no exception is thrown so far, the command line is correct. You can then use the following functions to retrieve the parameters' values:
 |function | description |
 |---------|-------------|
-|`is_spec(const std::string&)`: to know if a simple parameter is specified.|
-|`num_val(const std::string&, const int=1)`: to get the n-th numeric value of a numeric parameter. The first one is accessed with index 1, the default value.\
-|`str_val(const std::string&, const int=1)`: to get the value of a `std::string` parameter. The first one is accessed with index 1, the default value.|
-|`cho_val(const std::string&)`: to get the value of a multiple choice parameter.|
+|`is_spec(const std::string&)` | to know if a simple parameter is specified.|
+|`num_val(const std::string&, const int=1)` | to get the n-th numeric value of a numeric parameter. The first one is accessed with index 1, the default value.\
+|`str_val(const std::string&, const int=1)` | to get the value of a `std::string` parameter. The first one is accessed with index 1, the default value.|
+|`cho_val(const std::string&)` | to get the value of a multiple choice parameter.|
 
 #### Catch the following exceptions
 
