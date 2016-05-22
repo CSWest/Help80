@@ -4,7 +4,7 @@ The classes defined in this project can be used for parameters parsing and displ
 
 ### Use
 
-To use the classes in your own project, just include the files *Parameters.hpp* and *Parameters.cpp* in your project.
+To use the classes in your own project, just include the files [*Parameters.hpp*](src/Parameters.hpp) and [*Parameters.cpp*](Parameters.cpp) in your project.
 
 #### How to build the menu
         
@@ -32,7 +32,7 @@ First, call `parse_params` to analyse the command line arguments. Then, use the 
 
 ### Example
 
-The file *main.cpp* provides an example of how to use this project. Here is the output of the `print_help` function. No formatting is made by the user:
+The file [*main.cpp*](src/main.cpp) provides an example of how to use this project. Here is the output of the `print_help` function. No formatting is made by the user:
 
 	These classes are a set of tools for the management of command line arguments.
 	By using these classes in your project, you do not need to worry about designing
