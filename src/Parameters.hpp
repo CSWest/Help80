@@ -269,15 +269,24 @@ class Parameters {
 
 template<typename T>
 void Parameters::print_default_value(ParamHolder* const p, const bool add_quotes) const {
-    /* reinterpret with the good type */
-    const Param<T>* const p_reint = dynamic_cast<Param<T>* const>(p);
-    if(lang==lang_fr) std::cout << desc_indent << bold("Défaut :");
-    else              std::cout << desc_indent << bold("Default:");
-    for(std::size_t j=0 ; j<p->nb_values ; j++) {
-        if(!add_quotes) std::cout << " "   << p_reint->def_values[j];         if(j<p->nb_values-1) std::cout << ",";
-        else            std::cout << " \"" << p_reint->def_values[j] << "\""; if(j<p->nb_values-1) std::cout << ",";
+    if(typeid(T).name()!=typeid(int                   ).name() && typeid(T).name()!=typeid(long int         ).name()
+    && typeid(T).name()!=typeid(long long int         ).name() && typeid(T).name()!=typeid(unsigned long int).name()
+    && typeid(T).name()!=typeid(unsigned long long int).name() && typeid(T).name()!=typeid(float            ).name()
+    && typeid(T).name()!=typeid(double                ).name() && typeid(T).name()!=typeid(long double      ).name()
+    && typeid(T).name()!=typeid(std::string           ).name()) {
+        throw std::string("type not supported yet");
     }
-    std::cout << std::endl;
+    else {
+        /* reinterpret with the good type */
+        const Param<T>* const p_reint = dynamic_cast<Param<T>* const>(p);
+        if(lang==lang_fr) std::cout << desc_indent << bold("Défaut :");
+        else              std::cout << desc_indent << bold("Default:");
+        for(std::size_t j=0 ; j<p->nb_values ; j++) {
+            if(!add_quotes) std::cout << " "   << p_reint->def_values[j];         if(j<p->nb_values-1) std::cout << ",";
+            else            std::cout << " \"" << p_reint->def_values[j] << "\""; if(j<p->nb_values-1) std::cout << ",";
+        }
+        std::cout << std::endl;
+    }
 }
 
 template<typename T>
@@ -288,10 +297,18 @@ const T Parameters::num_val(const std::string& param_name, const int value_numbe
             throw std::string("parameter \"--" + param_name + "\" only has " + std::to_string(p->nb_values) + " values");
         }
         else {
-            /* reinterpret with the good type */
-            Param<T>* const p_reint = dynamic_cast<Param<T>* const>(p);
-            /* return value */
-            return p_reint->values[value_number-1];
+            if(typeid(T).name()!=typeid(int                   ).name() && typeid(T).name()!=typeid(long int         ).name()
+            && typeid(T).name()!=typeid(long long int         ).name() && typeid(T).name()!=typeid(unsigned long int).name()
+            && typeid(T).name()!=typeid(unsigned long long int).name() && typeid(T).name()!=typeid(float            ).name()
+            && typeid(T).name()!=typeid(double                ).name() && typeid(T).name()!=typeid(long double      ).name()) {
+                throw std::string("type not supported yet");
+            }
+            else {
+                /* reinterpret with the good type */
+                Param<T>* const p_reint = dynamic_cast<Param<T>* const>(p);
+                /* return value */
+                return p_reint->values[value_number-1];
+            }
         }
     }
     else {
