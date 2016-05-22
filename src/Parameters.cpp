@@ -107,6 +107,8 @@ const std::string Parameters::underline(const std::string& str) {
     #endif
 }
 
+/*** setters ***/
+
 void Parameters::set_program_description(const std::string &p_description) {
     description        = p_description + " ";
     description_is_set = true;

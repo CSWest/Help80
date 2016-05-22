@@ -36,28 +36,33 @@ FILE
     nothing for std::string parameters).
     
     
-                       ---------------                 ----------------
-                       | ParamHolder |---------------<>|  Parameters  |
-                       ---------------                 ----------------
-                              ^
-                              |
-                              |    ------------
-                      -------------| Template |
-                      |     Param  --+---------
-                      ----------------
+                          ---------------                 ----------------
+                          | ParamHolder |---------------<>|  Parameters  |
+                          ---------------                 ----------------
+                                  ^
+                                 |
+                                 |    ------------
+                         -------------| Template |
+                         |     Param  --+---------
+                         ----------------
  
                          
     ParamHolder and Param are private nested classes inside class Parameters. Also, Parameters
     defines the following exception classes:
-        - ValueOutOfRangeException: thrown if the value given is not in the range of the built-in type
+        - ValueOutOfRangeException: thrown if the value given is not in the range of the built-in
+                                    type
         - NotEnoughValuesException: when cmd line doesn't have as many args as required
         - DecimalExpectedException: when a decimal value is expected but not given
         - IntegerExpectedException: when an integer value is expected but not given
-        - UndefinedValueException: when trying to access n-th value of a parameter that doesn't exist
-        - UnsupportedParameterTypeException: when the developer tries to create a parameter of unsupported type
-        - DuplicateParameterException: when the developer tries to create a parameter with an existing name
+        - UndefinedValueException: when trying to access n-th value of a parameter that doesn't
+                                   exist
+        - UnsupportedParameterTypeException: when the developer tries to create a parameter of
+                                             unsupported type
+        - DuplicateParameterException: when the developer tries to create a parameter with an
+                                       existing name
         - UnknownParameterException: when there is an unknown parameter in the command line
-        - UndefinedParameterException: when the developer tries to retrieve value for a parameter that doesn't exist
+        - UndefinedParameterException: when the developer tries to retrieve value for a parameter
+                                       that doesn't exist
     
  
     How to build the menu:
@@ -180,10 +185,10 @@ class Parameters {
         static const int          get_terminal_width();                                    // returns current's terminal width
         static const std::string  bold(const std::string&);                                // returns the bold version of str
         static const std::string  underline(const std::string&);                           // returns the underlined version of str
-        template<typename T> void pr_def(ParamHolder* const, const bool=false)   const;    // prints default value
-        void                      print_description()                            const;    // print program description
-        void                      print_usage()                                  const;    // print usage
-        void                      print_parameters()                             const;    // print list of parameters
+        template<typename T> void pr_def(ParamHolder* const, const bool=false) const;      // prints default value
+        void                      print_description()                          const;      // print program description
+        void                      print_usage()                                const;      // print usage
+        void                      print_parameters()                           const;      // print list of parameters
     
         /* cmd line */
         const int                 argc;                                                    // command line args number
@@ -388,6 +393,21 @@ class Parameters {
 /*** template functions definition ***/
 
 template<typename T>
+void Parameters::define_num_str_param(const std::string& param_name, const std::vector<std::string>& values_names, const std::vector<T>& default_param_values, const std::string& param_desc, const bool display_default_value) {
+    /* check if already exist */
+    if(params.count("--" + param_name)) {
+        throw DuplicateParameterException(param_name, "Parameters::define_param", lang);
+    }
+    /* get type name */
+    const std::string type_name = typeid(T).name();
+    /* create param */
+    Param<T>* const p = new Param<T>("--" + param_name, param_desc, values_names, default_param_values, display_default_value);
+    /* store param */
+    order.insert(std::make_pair(params.size(), "--" + param_name));
+    params.insert(std::make_pair("--" + param_name, p));
+}
+
+template<typename T>
 void Parameters::pr_def(ParamHolder* const p, const bool add_quotes) const {
     if(typeid(T).name()!=typeid(int                   ).name() && typeid(T).name()!=typeid(long int         ).name()
     && typeid(T).name()!=typeid(long long int         ).name() && typeid(T).name()!=typeid(unsigned long int).name()
@@ -433,21 +453,6 @@ const T Parameters::num_val(const std::string& param_name, const int value_numbe
     else {
         throw UndefinedParameterException(param_name, "Parameters::define_param", lang);
     }
-}
-
-template<typename T>
-void Parameters::define_num_str_param(const std::string& param_name, const std::vector<std::string>& values_names, const std::vector<T>& default_param_values, const std::string& param_desc, const bool display_default_value) {
-    /* check if already exist */
-    if(params.count("--" + param_name)) {
-        throw DuplicateParameterException(param_name, "Parameters::define_param", lang);
-    }
-    /* get type name */
-    const std::string type_name = typeid(T).name();
-    /* create param */
-    Param<T>* const p = new Param<T>("--" + param_name, param_desc, values_names, default_param_values, display_default_value);
-    /* store param */
-    order.insert(std::make_pair(params.size(), "--" + param_name));
-    params.insert(std::make_pair("--" + param_name, p));
 }
 
 #endif
