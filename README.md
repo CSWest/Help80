@@ -11,10 +11,6 @@ Help80 allows you to:
 * automatically design a help menu that fits the terminal's width
 * make sure all the input arguments respect the size of the built-in type you assign them to 
 
-### Use
-
-To use the classes in your own project, just include the files [*Parameters.hpp*](src/Parameters.hpp) and [*Parameters.cpp*](src/Parameters.cpp) in your project.
-
 Supported types:
 * `std::string`
 * `int`
@@ -29,6 +25,10 @@ Supported types:
 Note:
 * type `bool` is reserved for parameters with no value
 * type `std::string` can be used, but is also used for multiple choices parameters
+
+### Use
+
+To use the classes in your own project, just include the files [*Parameters.hpp*](src/Parameters.hpp) and [*Parameters.cpp*](src/Parameters.cpp) in your project and follow these steps:
 
 #### Create the `Parameters` object
 
