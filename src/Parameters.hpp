@@ -80,9 +80,29 @@ FILE
 #ifndef Parameters_hpp
 #define Parameters_hpp
 
-#include <sys/ioctl.h>
-#include <stdio.h>
-#include <unistd.h>
+#define PLATFORM_WINDOWS  1
+#define PLATFORM_MAC      2
+#define PLATFORM_UNIX     3
+
+#define INVALID_SOCKET -1
+#define SOCKET_ERROR   -1
+
+/* Platform detection */
+#if defined(_WIN32)
+    #define PLATFORM PLATFORM_WINDOWS
+#elif defined(__APPLE__)
+    #define PLATFORM PLATFORM_MAC
+#else
+    #define PLATFORM PLATFORM_UNIX
+#endif
+
+#if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
+    #include <sys/ioctl.h>
+    #include <stdio.h>
+    #include <unistd.h>
+#elif PLATFORM == PLATFORM_WINDOWS
+    #include <windows.h>
+#endif
 
 #include <iostream>
 #include <limits>
