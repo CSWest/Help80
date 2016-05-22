@@ -4,7 +4,7 @@ The classes defined in this project can be used for parameters parsing and displ
 
 ### Use
 
-To use the classes in your own project, just include the files [*Parameters.hpp*](src/Parameters.hpp) and [*Parameters.cpp*](Parameters.cpp) in your project.
+To use the classes in your own project, just include the files [*Parameters.hpp*](src/Parameters.hpp) and [*Parameters.cpp*](src/Parameters.cpp) in your project.
 
 #### How to build the menu
         
