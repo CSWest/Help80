@@ -71,6 +71,12 @@ Parameters::Parameters(const int p_argc, char const* const* const p_argv, config
     for(int i=0 ; i<desc_indent_len ; i++)   desc_indent += " ";
 }
 
+Parameters::~Parameters() {
+    for(std::pair<std::string, ParamHolder*> p: params) delete p.second;
+}
+
+/*** static functions ***/
+
 const int Parameters::get_terminal_width() {
     #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
         /* linux, mac */
@@ -85,8 +91,20 @@ const int Parameters::get_terminal_width() {
     #endif
 }
 
-Parameters::~Parameters() {
-    for(std::pair<std::string, ParamHolder*> p: params) delete p.second;
+const std::string Parameters::bold(const std::string& str) {
+    #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
+        return "\e[1m" + str + "\e[0m";
+    #else
+        return str;
+    #endif
+}
+
+const std::string Parameters::underline(const std::string& str) {
+    #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
+        return "\e[4m" + str + "\e[0m";
+    #else
+        return str;
+    #endif
 }
 
 void Parameters::set_program_description(const std::string &p_description) {
@@ -109,8 +127,7 @@ void Parameters::insert_subsection(const std::string& subsection_title) {
 void Parameters::define_param(const std::string& param_name, const std::string& param_desc) {
     /* check if already exist */
     if(params.count("--" + param_name)) {
-        if(lang==lang_fr) throw std::string("erreur : un paramètre de même nom existe déjà");
-        else              throw std::string("error: a parameter with the same name already exists");
+        throw DuplicateParameterException(param_name, "Parameters::define_param", lang);
     }
     /* get type name */
     const std::string type_name = typeid(bool).name();
@@ -124,8 +141,7 @@ void Parameters::define_param(const std::string& param_name, const std::string& 
 void Parameters::define_choice_param(const std::string& param_name, const std::string& value_name, const std::string& default_choice, vec_choices p_choices, const std::string& param_desc, const bool display_default_value) {
     /* check if already exist */
     if(params.count("--" + param_name)) {
-        if(lang==lang_fr) throw std::string("erreur : un paramètre de même nom existe déjà");
-        else              throw std::string("error: a parameter with the same name already exists");
+        throw DuplicateParameterException(param_name, "Parameters::define_param", lang);
     }
     /* get type name */
     const std::string type_name = typeid(std::string).name();
@@ -377,88 +393,81 @@ void Parameters::parse_params() {
             ParamHolder* const p = params[line_param];
             /* read param values */
             for(int j=0 ; j<p->nb_values ; j++) {
-                if(++i<=argc) {
+                if(++i<argc) {
                     std::string arg_value(argv[i]);
                     if(p->type_name==typeid(int).name()) {
                         Param<int>* const p_reint = dynamic_cast<Param<int>* const>(p);
                         try { p_reint->values[j] = std::stoi(arg_value); }
-                        catch(const std::invalid_argument& e) { pr_exi(line_param, arg_value); }
-                        catch(const std::out_of_range& e)     { pr_ran<int>(line_param, arg_value); }
+                        catch(const std::invalid_argument& e) { throw IntegerExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
+                        catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<int>(line_param, arg_value, "Parameters::parse_params", lang); }
                     }
                     else if(p->type_name==typeid(long int).name()) {
                         Param<long int>* const p_reint = dynamic_cast<Param<long int>* const>(p);
                         try { p_reint->values[j] = std::stol(arg_value); }
-                        catch(const std::invalid_argument& e) { pr_exi(line_param, arg_value); }
-                        catch(const std::out_of_range& e)     { pr_ran<long int>(line_param, arg_value); }
+                        catch(const std::invalid_argument& e) { throw IntegerExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
+                        catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<long int>(line_param, arg_value, "Parameters::parse_params", lang); }
                     }
                     else if(p->type_name==typeid(long long int).name()) {
                         Param<long long int>* const p_reint = dynamic_cast<Param<long long int>* const>(p);
                         try { p_reint->values[j] = std::stoll(arg_value); }
-                        catch(const std::invalid_argument& e) { pr_exi(line_param, arg_value); }
-                        catch(const std::out_of_range& e)     { pr_ran<long long int>(line_param, arg_value); }
+                        catch(const std::invalid_argument& e) { throw IntegerExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
+                        catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<long long int>(line_param, arg_value, "Parameters::parse_params", lang); }
                     }
                     else if(p->type_name==typeid(unsigned long int).name()) {
                         Param<unsigned long int>* const p_reint = dynamic_cast<Param<unsigned long int>* const>(p);
                         try { p_reint->values[j] = std::stoul(arg_value); }
-                        catch(const std::invalid_argument& e) { pr_exi(line_param, arg_value); }
-                        catch(const std::out_of_range& e)     { pr_ran<unsigned long int>(line_param, arg_value); }
+                        catch(const std::invalid_argument& e) { throw IntegerExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
+                        catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<unsigned long int>(line_param, arg_value, "Parameters::parse_params", lang); }
                     }
                     else if(p->type_name==typeid(unsigned long long int).name()) {
                         Param<unsigned long long int>* const p_reint = dynamic_cast<Param<unsigned long long int>* const>(p);
                         try { p_reint->values[j] = std::stoull(arg_value); }
-                        catch(const std::invalid_argument& e) { pr_exi(line_param, arg_value); }
-                        catch(const std::out_of_range& e)     { pr_ran<unsigned long long int>(line_param, arg_value); }
+                        catch(const std::invalid_argument& e) { throw IntegerExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
+                        catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<unsigned long long int>(line_param, arg_value, "Parameters::parse_params", lang); }
                     }
                     else if(p->type_name==typeid(float).name()) {
                         Param<float>* const p_reint = dynamic_cast<Param<float>* const>(p);
                         try { p_reint->values[j] = std::stof(arg_value); }
-                        catch(const std::invalid_argument& e) { pr_exd(line_param, arg_value); }
-                        catch(const std::out_of_range& e)     { pr_ran<float>(line_param, arg_value); }
+                        catch(const std::invalid_argument& e) { throw DecimalExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
+                        catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<float>(line_param, arg_value, "Parameters::parse_params", lang); }
                     }
                     else if(p->type_name==typeid(double).name()) {
                         Param<double>* const p_reint = dynamic_cast<Param<double>* const>(p);
                         try { p_reint->values[j] = std::stod(arg_value); }
-                        catch(const std::invalid_argument& e) { pr_exd(line_param, arg_value); }
-                        catch(const std::out_of_range& e)     { pr_ran<double>(line_param, arg_value); }
+                        catch(const std::invalid_argument& e) { throw DecimalExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
+                        catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<double>(line_param, arg_value, "Parameters::parse_params", lang); }
                     }
                     else if(p->type_name==typeid(long double).name()) {
-                        /* reinterpret with the good type */
                         Param<long double>* const p_reint = dynamic_cast<Param<long double>* const>(p);
-                        /* update value */
                         try { p_reint->values[j] = std::stold(arg_value); }
-                        catch(const std::invalid_argument& e) { pr_exd(line_param, arg_value); }
-                        catch(const std::out_of_range& e)     { pr_ran<long double>(line_param, arg_value); }
+                        catch(const std::invalid_argument& e) { throw DecimalExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
+                        catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<long double>(line_param, arg_value, "Parameters::parse_params", lang); }
                     }
                     else if(p->type_name==typeid(std::string).name()) {
-                        /* reinterpret with the good type */
                         Param<std::string>* const p_reint = dynamic_cast<Param<std::string>* const>(p);
-                        /* update value */
                         p_reint->values[j] = arg_value;
                     }
                 }
                 else {
-                    if(lang==lang_fr) std::cerr << "erreur : le paramètre \"" << line_param << "\" attend " << p->nb_values << " valeurs" << std::endl;
-                    else              std::cerr << "error: parameter \"" << line_param << "\" expects " << p->nb_values << " values" << std::endl;
+                    throw NotEnoughValuesException(p->name, p->nb_values, j, "Parameters::parse_params", lang);
                 }
             }
             /* arg is defined */
             p->is_defined = true;
         }
         else {
-            if(lang==lang_fr) std::cerr << "erreur : paramètre \"--" << line_param << "\" inconnu" << std::endl;
-            else              std::cerr << "unknown parameter \"" << line_param << "\"" << std::endl;
+            throw UnknownParameterException(line_param, "Parameters::parse_params", lang);
         }
     }
 }
 
-const bool Parameters::is_def(const std::string& param_name) const {
+const bool Parameters::is_spec(const std::string& param_name) const {
     if(params.count("--" + param_name)) {
         ParamHolder* const p = params.at("--" + param_name);
         return p->is_defined;
     }
     else {
-        if(lang==lang_fr) throw std::string("erreur : paramètre \"--" + param_name + "\" inconnu");
-        else              throw std::string("error: unknown parameter \"--" + param_name + "\"");
+        throw UndefinedParameterException(param_name, "Parameters::is_spec", lang);
     }
 }
 
@@ -466,7 +475,7 @@ const std::string Parameters::str_val(const std::string& param_name, const int v
     if(params.count("--" + param_name)) {
         Parameters::ParamHolder* const p = params.at("--" + param_name);
         if(value_number>p->nb_values) {
-            throw std::string("parameter \"--" + param_name + "\" only has " + std::to_string(p->nb_values) + " values");
+            throw UndefinedValueException(param_name, p->nb_values, value_number, "Parameters::str_val", lang);
         }
         else {
             /* reinterpret with the good type */
@@ -476,7 +485,7 @@ const std::string Parameters::str_val(const std::string& param_name, const int v
         }
     }
     else {
-        throw std::string("error: unknown parameter \"--" + param_name + "\"");
+        throw UndefinedParameterException(param_name, "Parameters::is_def", lang);
     }
 }
 
@@ -489,32 +498,6 @@ const std::string Parameters::cho_val(const std::string& param_name) const {
         return p_reint->values[0];
     }
     else {
-        throw std::string("error: unknown parameter \"--" + param_name + "\"");
+        throw UndefinedParameterException(param_name, "Parameters::is_def", lang);
     }
-}
-
-void Parameters::pr_exi(const std::string& line_param, const std::string& arg_value) const {
-    if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" attend une valeur entière, et a reçu \"" << arg_value << "\"";
-    else              std::cerr << "parameter \""    << line_param << "\" expects an integer value, received \""   << arg_value << "\"";
-}
-
-void Parameters::pr_exd(const std::string& line_param, const std::string& arg_value) const {
-    if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" attend une valeur décimale, et a reçu \"" << arg_value << "\"";
-    else              std::cerr << "parameter \""    << line_param << "\" expects a decimal value, received \""   << arg_value << "\"";
-}
-
-const std::string Parameters::bold(const std::string& str) {
-    #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
-        return "\e[1m" + str + "\e[0m";
-    #else
-        return str;
-    #endif
-}
-
-const std::string Parameters::underline(const std::string& str) {
-    #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
-        return "\e[4m" + str + "\e[0m";
-    #else
-        return str;
-    #endif
 }

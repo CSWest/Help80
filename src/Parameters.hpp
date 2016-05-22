@@ -68,7 +68,7 @@ FILE
  
         First, call parse_params to analyse the command line arguments. Then,
         use the functions:
-            - is_def  :  to know if a simple parameter is specified
+            - is_spec : to know if a simple parameter is specified
             - num_val : to get a numeric value
             - str_val : to get a std::string value
             - cho_val : to get a multiple choice value
@@ -123,37 +123,33 @@ class Parameters {
         enum LANG {lang_fr, lang_us};
     
         struct config {
-            const int max_terminal_width;                                                 // max width of terminal
-            const int param_to_desc_len;                                                  // nb of spaces between longest param list and descripton
-            const int desc_indent_len;                                                    // nb of characters from the left to print description
-            const int params_indent_len;                                                  // nb of characters from the left to print param+values
-            const int choice_indent_len;                                                  // indentation for choices descriptions
-            const int choice_desc_indent_len;                                             // indentation for choice description
-            const int right_margin_len;                                                   // nb of chars from the right of the terminal
-            LANG      lang;                                                               // language to print the menu in
+            const int max_terminal_width;                                                  // max width of terminal
+            const int param_to_desc_len;                                                   // nb of spaces between longest param list and descripton
+            const int desc_indent_len;                                                     // nb of characters from the left to print description
+            const int params_indent_len;                                                   // nb of characters from the left to print param+values
+            const int choice_indent_len;                                                   // indentation for choices descriptions
+            const int choice_desc_indent_len;                                              // indentation for choice description
+            const int right_margin_len;                                                    // nb of chars from the right of the terminal
+            LANG      lang;                                                                // language to print the menu in
         };
     
         Parameters(const int, char const* const* const, config);
         Parameters(const int, char const* const* const, config, const int);
         ~Parameters();
     
-        static const int         get_terminal_width();                                    // returns current's terminal width
-        static const std::string bold(const std::string&);                                // returns the bold version of str
-        static const std::string underline(const std::string&);                           // returns the underlined version of str
-    
         /* use of parameters */
         template<typename T>
-        const T                  num_val(const std::string&, const int=1) const;          // return n-th value for parameter. nb starts at 1
-        const std::string        str_val(const std::string&, const int=1) const;          // return n-th value for parameter. nb starts at 1
-        const std::string        cho_val(const std::string&)              const;          // returns choice value
-        const bool               is_def(const std::string&)               const;          // tells if parameters is defined
-        void                     parse_params();                                          // reads cmd line and store args
+        const T                   num_val(const std::string&, const int=1) const;          // return n-th value for parameter. nb starts at 1
+        const std::string         str_val(const std::string&, const int=1) const;          // return n-th value for parameter. nb starts at 1
+        const std::string         cho_val(const std::string&)              const;          // returns choice value
+        const bool                is_spec(const std::string&)              const;          // tells if parameters is defined
+        void                      parse_params();                                          // reads cmd line and store args
     
         /* help menu */
-        void                     insert_subsection(const std::string&);                   // prints subsection when printing help menu
-        void                     print_help(const bool=true, const bool=true) const;      // print help menu
-        void                     set_program_description(const std::string&);             // sets program description
-        void                     set_usage(const std::string&);                           // sets usage
+        void                      insert_subsection(const std::string&);                   // prints subsection when printing help menu
+        void                      print_help(const bool=true, const bool=true) const;      // print help menu
+        void                      set_program_description(const std::string&);             // sets program description
+        void                      set_usage(const std::string&);                           // sets usage
     
         template<typename T>  // in the order: add a parameter with values, with choices, with no values
         void define_num_str_param(const std::string&, const std::vector<std::string>&, const std::vector<T>&, const std::string&, const bool=false);
@@ -167,47 +163,47 @@ class Parameters {
         typedef std::map<std::string, vec_choices>        map_choices;
         typedef std::map<size_t, std::string>             map_order;
     
-    
-        template<typename T> void pr_def(ParamHolder* const, const bool=false)   const;   // prints default value
-        template<typename T> void pr_ran(const std::string&, const std::string&) const;   // prints expected range
-        void                      pr_exi(const std::string&, const std::string&) const;   // prints expected an integer value
-        void                      pr_exd(const std::string&, const std::string&) const;   // prints expected a decimal value
-        void                      print_description()                            const;   // print program description
-        void                      print_usage()                                  const;   // print usage
-        void                      print_parameters()                             const;   // print list of parameters
-    
         Parameters(const Parameters&);
         Parameters& operator=(const Parameters&);
     
+        /* display funcs */
+        static const int          get_terminal_width();                                    // returns current's terminal width
+        static const std::string  bold(const std::string&);                                // returns the bold version of str
+        static const std::string  underline(const std::string&);                           // returns the underlined version of str
+        template<typename T> void pr_def(ParamHolder* const, const bool=false)   const;    // prints default value
+        void                      print_description()                            const;    // print program description
+        void                      print_usage()                                  const;    // print usage
+        void                      print_parameters()                             const;    // print list of parameters
+    
         /* cmd line */
-        const int                argc;                                                    // command line args number
-        char const* const* const argv;                                                    // command line args values
+        const int                 argc;                                                    // command line args number
+        char const* const* const  argv;                                                    // command line args values
     
         /* display parameters */
-        const int                max_terminal_width;                                      // max width of the terminal
-        const int                terminal_width;                                          // the width of the terminal
-        const int                param_to_desc_len;                                       // nb of spaces between longest param list and descripton
-        const int                desc_indent_len;                                         // nb of characters form the left to print desccription
-        const int                params_indent_len;                                       // nb of characters from the left to print param+values
-        const int                choice_indent_len;                                       // indentation for choices
-        const int                choice_desc_indent_len;                                  // indentation for choices descriptions
-        const int                right_margin_len;                                        // nb of chars from the right of the terminal
-        std::string              desc_indent;                                             // spaces for indentation of big description
-        std::string              choice_indent;                                           // indentation for choices descriptions
-        std::string              params_indent;                                           // string of 'params_indent_len' spaces
+        const int                 max_terminal_width;                                      // max width of the terminal
+        const int                 terminal_width;                                          // the width of the terminal
+        const int                 param_to_desc_len;                                       // nb of spaces between longest param list and descripton
+        const int                 desc_indent_len;                                         // nb of characters form the left to print desccription
+        const int                 params_indent_len;                                       // nb of characters from the left to print param+values
+        const int                 choice_indent_len;                                       // indentation for choices
+        const int                 choice_desc_indent_len;                                  // indentation for choices descriptions
+        const int                 right_margin_len;                                        // nb of chars from the right of the terminal
+        std::string               desc_indent;                                             // spaces for indentation of big description
+        std::string               choice_indent;                                           // indentation for choices descriptions
+        std::string               params_indent;                                           // string of 'params_indent_len' spaces
     
         /* internal vars */
-        const LANG               lang;                                                    // language to print the menu in
-        std::string              description;                                             // description of the program
-        bool                     description_is_set;                                      // true if set_description() is called
-        std::string              usage;                                                   // usage of the program
-        bool                     usage_is_set;                                            // true if set_usage() is called
-        std::vector<std::string> subsections;                                             // sub sections titles in the help menu
-        std::vector<std::size_t> subs_indexes;                                            // indexes of the subsections (where to print them)
-        map_params               params;                                                  // data structure that stores all the parameters
-        map_order                order;                                                   // data structure to store order of parameters
-        map_choices              choices;                                                 // stores choices associated to choice-parameters
-        std::set<std::string>    choices_params;                                          // stores all the params that are multiple choice
+        const LANG                lang;                                                    // language to print the menu in
+        std::string               description;                                             // description of the program
+        bool                      description_is_set;                                      // true if set_description() is called
+        std::string               usage;                                                   // usage of the program
+        bool                      usage_is_set;                                            // true if set_usage() is called
+        std::vector<std::string>  subsections;                                             // sub sections titles in the help menu
+        std::vector<std::size_t>  subs_indexes;                                            // indexes of the subsections (where to print them)
+        map_params                params;                                                  // data structure that stores all the parameters
+        map_order                 order;                                                   // data structure to store order of parameters
+        map_choices               choices;                                                 // stores choices associated to choice-parameters
+        std::set<std::string>     choices_params;                                          // stores all the params that are multiple choice
     
     
     private:
@@ -226,13 +222,13 @@ class Parameters {
                     is_defined(false) {}
                 virtual ~ParamHolder() {}
             
-                const std::string              name;                                      // param name with added suffix '--'
-                const std::string              description;                               // long description paragraph, can't start or end with ' '
-                const std::size_t              nb_values;                                 // nb of values expected for the parameters
-                const std::vector<std::string> values_names;                              // name of these values, without '<' and '>'
-                const std::string              type_name;                                 // to distinguish the type of the values
-                const bool                     display_default_value;                     // if default value has to be displayed in help menu
-                bool                           is_defined;                                // if the arg was specified by the user
+                const std::string              name;                                       // param name with added suffix '--'
+                const std::string              description;                                // long description paragraph, can't start or end with ' '
+                const std::size_t              nb_values;                                  // nb of values expected for the parameters
+                const std::vector<std::string> values_names;                               // name of these values, without '<' and '>'
+                const std::string              type_name;                                  // to distinguish the type of the values
+                const bool                     display_default_value;                      // if default value has to be displayed in help menu
+                bool                           is_defined;                                 // if the arg was specified by the user
             
             
             private:
@@ -255,9 +251,125 @@ class Parameters {
                     ParamHolder(p_name, p_description, typeid(T).name()) {}
                 virtual ~Param() {}
                 
-                std::vector<T>       values;                                              // parameter values
-                const std::vector<T> def_values;                                          // parameter default values
+                std::vector<T>       values;                                               // parameter values
+                const std::vector<T> def_values;                                           // parameter default values
 
+        };
+
+
+    public:
+
+        class UndefinedParameterException: public std::exception {
+            public:
+                UndefinedParameterException(const std::string& p_param_name, const std::string& p_function, LANG lang) throw():
+                    description(lang==lang_fr
+                        ? "paramètre \"--" + p_param_name + "\" non défini dans la fonction \"" + p_function + "\""
+                        : "undefined parameter \"--" + p_param_name + "\" in function \"" + p_function + "\"") {}
+                virtual ~UndefinedParameterException() throw() {}
+                virtual const char* what()       const throw() { return description.c_str(); }
+            private:
+                const std::string description;   
+        };
+
+        class UnknownParameterException: public std::exception {
+            public:
+                UnknownParameterException(const std::string& p_param_name, const std::string& p_function, LANG lang) throw():
+                    description(lang==lang_fr
+                        ? "paramètre \"" + p_param_name + "\" inconnu dans la fonction \"" + p_function + "\""
+                        : "unknown parameter \"" + p_param_name + "\" in function \"" + p_function + "\"") {}
+                virtual ~UnknownParameterException() throw() {}
+                virtual const char* what()       const throw() { return description.c_str(); }
+            private:
+                const std::string description;
+        };
+
+        class DuplicateParameterException: public std::exception {
+            public:
+                DuplicateParameterException(const std::string& p_param_name, const std::string& p_function, LANG lang) throw():
+                    description(lang==lang_fr
+                        ? "définition du paramètre \"" + p_param_name + "\" dans la fonction \"" + p_function + "\" : un paramètre de même nom existe déjà"
+                        : "definition of parameter \"" + p_param_name + "\" in function \"" + p_function + "\": a parameter with the same name already exists") {}
+                virtual ~DuplicateParameterException() throw() {}
+                virtual const char* what()       const throw() { return description.c_str(); }
+            private:
+                const std::string description;
+        };
+
+        class UnsupportedParameterTypeException: public std::exception {
+            public:
+                UnsupportedParameterTypeException(const std::string& p_type, const std::string& p_function, LANG lang) throw():
+                    description(lang==lang_fr
+                        ? "type de paramètre \"" + p_type + "\" pas encore supporté dans la fonction \"" + p_function + "\""
+                        : "type \"" + p_type + "\" not supported yet in function \"" + p_function + "\"") {}
+                virtual ~UnsupportedParameterTypeException() throw() {}
+                virtual const char* what()             const throw() { return description.c_str(); }
+            private:
+                const std::string description;
+        };
+
+        class UndefinedValueException: public std::exception {
+            public:
+                UndefinedValueException(std::string const& p_param_name, const std::size_t nb_values, const int req_value, const std::string& p_function, LANG lang) throw():
+                    description(lang==lang_fr
+                        ? "paramètre \"" + p_param_name + "\" : " + std::to_string(nb_values) + " valeurs, tentative d'accès à " + std::to_string(req_value) + " dans la fonction \"" + p_function + "\""
+                        : "parameter \"" + p_param_name + "\": " + std::to_string(nb_values) + " values, tried to access " + std::to_string(req_value) + " in function \"" + p_function + "\"") {}
+                virtual ~UndefinedValueException() throw() {}
+                virtual const char* what()    const throw() { return description.c_str(); }
+            private:
+                const std::string description;
+        };
+
+        class IntegerExpectedException: public std::exception {
+            public:
+                IntegerExpectedException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG lang) throw():
+                    description(lang==lang_fr
+                        ? "le paramètre \"" + p_param_name + "\" attend une valeur entière, et a reçu \"" + arg_value + "\" dans la fonction \"" + p_function + "\""
+                        : "parameter \"" + p_param_name + "\" expects an integer value, but received \"" + arg_value + "\" in function \"" + p_function + "\"") {}
+                virtual ~IntegerExpectedException() throw() {}
+                virtual const char* what()    const throw() { return description.c_str(); }
+            private:
+                const std::string description;
+        };
+
+        class DecimalExpectedException: public std::exception {
+            public:
+                DecimalExpectedException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG lang) throw():
+                    description(lang==lang_fr
+                        ? "le paramètre \"" + p_param_name + "\" attend une valeur décimale, et a reçu \"" + arg_value + "\" dans la fonction \"" + p_function + "\""
+                        : "parameter \"" + p_param_name + "\" expects a decimal value, but received \"" + arg_value + "\" in function \"" + p_function + "\"") {}
+                virtual ~DecimalExpectedException() throw() {}
+                virtual const char* what()    const throw() { return description.c_str(); }
+            private:
+                const std::string description;
+        };
+
+        class NotEnoughValuesException: public std::exception {
+            public:
+                NotEnoughValuesException(std::string const& p_param_name, const std::size_t nb_values, const int rec_values, const std::string& p_function, LANG lang) throw():
+                    description(lang==lang_fr
+                        ? "le paramètre \"" + p_param_name + "\" attend " + std::to_string(nb_values) + " valeurs, et en a reçu " + std::to_string(rec_values) + " dans la fonction \"" + p_function + "\""
+                        : "parameter \"" + p_param_name + "\" expects " + std::to_string(nb_values) + " values, but received " + std::to_string(rec_values) + " in function \"" + p_function + "\"") {}
+                virtual ~NotEnoughValuesException() throw() {}
+                virtual const char* what()    const throw() { return description.c_str(); }
+            private:
+                const std::string description;
+        };
+
+        template<typename T>
+        class ValueOutOfRangeException: public std::exception {
+            public:
+                ValueOutOfRangeException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG lang) throw():
+                    min(std::numeric_limits<T>::min()),
+                    max(std::numeric_limits<T>::max()),
+                    description(lang==lang_fr
+                        ? "le paramètre \"" + p_param_name + "\" doit être compris entre " + std::to_string(min) + " et " + std::to_string(max) + " mais a reçu " + arg_value + " dans la fonction \"" + p_function + "\""
+                        : "parameter \"" + p_param_name + "\" must be between " + std::to_string(min) + " and " + std::to_string(max) + " but received " + arg_value + " in function \"" + p_function + "\"") {}
+                virtual ~ValueOutOfRangeException() throw() {}
+                virtual const char* what()    const throw() { return description.c_str(); }
+            private:
+                T min;
+                T max;
+                const std::string description;
         };
 
 };
@@ -272,10 +384,9 @@ void Parameters::pr_def(ParamHolder* const p, const bool add_quotes) const {
     && typeid(T).name()!=typeid(unsigned long long int).name() && typeid(T).name()!=typeid(float            ).name()
     && typeid(T).name()!=typeid(double                ).name() && typeid(T).name()!=typeid(long double      ).name()
     && typeid(T).name()!=typeid(std::string           ).name()) {
-        throw std::string("type not supported yet");
+        throw UnsupportedParameterTypeException(typeid(T).name(), "Parameters::num_val", lang);
     }
     else {
-        /* reinterpret with the good type */
         const Param<T>* const p_reint = dynamic_cast<Param<T>* const>(p);
         if(lang==lang_fr) std::cout << desc_indent << bold("Défaut :");
         else              std::cout << desc_indent << bold("Default:");
@@ -288,26 +399,18 @@ void Parameters::pr_def(ParamHolder* const p, const bool add_quotes) const {
 }
 
 template<typename T>
-void Parameters::pr_ran(const std::string& line_param, const std::string& arg_value) const {
-    T max = std::numeric_limits<T>::max();
-    T min = std::numeric_limits<T>::min();
-    if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" doit être compris entre " << min << " et " << max << " mais a reçu " << arg_value;
-    else              std::cerr << "parameter \"" << line_param << "\" must be between " << min << " and " << max << " but received " << arg_value;
-}
-
-template<typename T>
 const T Parameters::num_val(const std::string& param_name, const int value_number) const {
     if(params.count("--" + param_name)) {
         Parameters::ParamHolder* const p = params.at("--" + param_name);
         if(value_number>p->nb_values) {
-            throw std::string("parameter \"--" + param_name + "\" only has " + std::to_string(p->nb_values) + " values");
+            throw UndefinedValueException(param_name, p->nb_values, value_number, "Parameters::str_val", lang);
         }
         else {
             if(typeid(T).name()!=typeid(int                   ).name() && typeid(T).name()!=typeid(long int         ).name()
             && typeid(T).name()!=typeid(long long int         ).name() && typeid(T).name()!=typeid(unsigned long int).name()
             && typeid(T).name()!=typeid(unsigned long long int).name() && typeid(T).name()!=typeid(float            ).name()
             && typeid(T).name()!=typeid(double                ).name() && typeid(T).name()!=typeid(long double      ).name()) {
-                throw std::string("type not supported yet");
+                throw UnsupportedParameterTypeException(typeid(T).name(), "Parameters::num_val", lang);
             }
             else {
                 /* reinterpret with the good type */
@@ -318,7 +421,7 @@ const T Parameters::num_val(const std::string& param_name, const int value_numbe
         }
     }
     else {
-        throw std::string("error: unknown parameter \"--" + param_name + "\"");
+        throw UndefinedParameterException(param_name, "Parameters::define_param", lang);
     }
 }
 
@@ -326,8 +429,7 @@ template<typename T>
 void Parameters::define_num_str_param(const std::string& param_name, const std::vector<std::string>& values_names, const std::vector<T>& default_param_values, const std::string& param_desc, const bool display_default_value) {
     /* check if already exist */
     if(params.count("--" + param_name)) {
-        if(lang==lang_fr) throw std::string("erreur : un paramètre de même nom existe déjà");
-        else              throw std::string("error: a parameter with the same name already exists");
+        throw DuplicateParameterException(param_name, "Parameters::define_param", lang);
     }
     /* get type name */
     const std::string type_name = typeid(T).name();

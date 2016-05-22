@@ -68,16 +68,16 @@ int main(int argc, char** argv) {
     /* retrieve values */
     std::cout << std::endl;
     std::cout << "Now we can print some values:" << std::endl;
-    std::cout << "  help: "                      << p.is_def("help") << std::endl;
+    std::cout << "  help: "                      << p.is_spec("help") << std::endl;
     std::cout << "  width: "                     << p.num_val<int>("width") << std::endl;
     std::cout << "  multiple: "                  << p.num_val<double>("multiple", 1) << ", "
                                                  << p.num_val<double>("multiple", 2) << ", "
                                                  << p.num_val<double>("multiple", 3) << std::endl;
     std::cout << "  mode: \""                    << p.cho_val("mode") << "\"" << std::endl;
-    std::cout << "  first_option: "              << p.is_def("first_option") << std::endl;
-    std::cout << "  second_option: "             << p.is_def("second_option") << std::endl;
-    std::cout << "  third_option: "              << p.is_def("third_option") << std::endl;
-    std::cout << "  fourth_really_long_option: " << p.is_def("fourth_really_long_option") << std::endl;
+    std::cout << "  first_option: "              << p.is_spec("first_option") << std::endl;
+    std::cout << "  second_option: "             << p.is_spec("second_option") << std::endl;
+    std::cout << "  third_option: "              << p.is_spec("third_option") << std::endl;
+    std::cout << "  fourth_really_long_option: " << p.is_spec("fourth_really_long_option") << std::endl;
 
     return 0;    
     
