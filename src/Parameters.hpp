@@ -242,25 +242,25 @@ const T Parameters::num_val(const std::string& param_name, const int value_numbe
                 /* return value */
                 return p_reint->values[value_number-1];
             }
-            if(p->type_name==typeid(long int).name()) {
+            else if(p->type_name==typeid(long int).name()) {
                 /* reinterpret with the good type */
                 Param<long int>* const p_reint = dynamic_cast<Param<long int>* const>(p);
                 /* return value */
                 return p_reint->values[value_number-1];
             }
-            if(p->type_name==typeid(long long int).name()) {
+            else if(p->type_name==typeid(long long int).name()) {
                 /* reinterpret with the good type */
                 Param<long long int>* const p_reint = dynamic_cast<Param<long long int>* const>(p);
                 /* return value */
                 return p_reint->values[value_number-1];
             }
-            if(p->type_name==typeid(unsigned long int).name()) {
+            else if(p->type_name==typeid(unsigned long int).name()) {
                 /* reinterpret with the good type */
                 Param<unsigned long int>* const p_reint = dynamic_cast<Param<unsigned long int>* const>(p);
                 /* return value */
                 return p_reint->values[value_number-1];
             }
-            if(p->type_name==typeid(unsigned long long int).name()) {
+            else if(p->type_name==typeid(unsigned long long int).name()) {
                 /* reinterpret with the good type */
                 Param<unsigned long long int>* const p_reint = dynamic_cast<Param<unsigned long long int>* const>(p);
                 /* return value */

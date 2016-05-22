@@ -283,7 +283,7 @@ void Parameters::print_parameters() const {
                 for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
                 std::cout << std::endl;
             }
-            if(p->type_name==typeid(long int).name()) {
+            else if(p->type_name==typeid(long int).name()) {
                 /* reinterpret with the good type */
                 const Param<long int>* const p_reint = dynamic_cast<Param<long int>* const>(p);
                 if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
@@ -291,7 +291,7 @@ void Parameters::print_parameters() const {
                 for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
                 std::cout << std::endl;
             }
-            if(p->type_name==typeid(long long int).name()) {
+            else if(p->type_name==typeid(long long int).name()) {
                 /* reinterpret with the good type */
                 const Param<long long int>* const p_reint = dynamic_cast<Param<long long int>* const>(p);
                 if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
@@ -299,7 +299,7 @@ void Parameters::print_parameters() const {
                 for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
                 std::cout << std::endl;
             }
-            if(p->type_name==typeid(unsigned long int).name()) {
+            else if(p->type_name==typeid(unsigned long int).name()) {
                 /* reinterpret with the good type */
                 const Param<unsigned long int>* const p_reint = dynamic_cast<Param<unsigned long int>* const>(p);
                 if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
@@ -307,7 +307,7 @@ void Parameters::print_parameters() const {
                 for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
                 std::cout << std::endl;
             }
-            if(p->type_name==typeid(unsigned long long int).name()) {
+            else if(p->type_name==typeid(unsigned long long int).name()) {
                 /* reinterpret with the good type */
                 const Param<unsigned long long int>* const p_reint = dynamic_cast<Param<unsigned long long int>* const>(p);
                 if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
@@ -388,7 +388,7 @@ void Parameters::parse_params() {
                             else              std::cerr << "parameter \"" << line_param << "\" must be between " << min << " and " << max << " but received " << arg_value;
                         }
                     }
-                    if(p->type_name==typeid(long int).name()) {
+                    else if(p->type_name==typeid(long int).name()) {
                         /* reinterpret with the good type */
                         Param<long int>* const p_reint = dynamic_cast<Param<long int>* const>(p);
                         /* update value */
@@ -404,7 +404,7 @@ void Parameters::parse_params() {
                             else              std::cerr << "parameter \"" << line_param << "\" must be between " << min << " and " << max << " but received " << arg_value;
                         }
                     }
-                    if(p->type_name==typeid(long long int).name()) {
+                    else if(p->type_name==typeid(long long int).name()) {
                         /* reinterpret with the good type */
                         Param<long long int>* const p_reint = dynamic_cast<Param<long long int>* const>(p);
                         /* update value */
@@ -420,7 +420,7 @@ void Parameters::parse_params() {
                             else              std::cerr << "parameter \"" << line_param << "\" must be between " << min << " and " << max << " but received " << arg_value;
                         }
                     }
-                    if(p->type_name==typeid(unsigned long int).name()) {
+                    else if(p->type_name==typeid(unsigned long int).name()) {
                         /* reinterpret with the good type */
                         Param<unsigned long int>* const p_reint = dynamic_cast<Param<unsigned long int>* const>(p);
                         /* update value */
@@ -436,7 +436,7 @@ void Parameters::parse_params() {
                             else              std::cerr << "parameter \"" << line_param << "\" must be between " << min << " and " << max << " but received " << arg_value;
                         }
                     }
-                    if(p->type_name==typeid(unsigned long long int).name()) {
+                    else if(p->type_name==typeid(unsigned long long int).name()) {
                         /* reinterpret with the good type */
                         Param<unsigned long long int>* const p_reint = dynamic_cast<Param<unsigned long long int>* const>(p);
                         /* update value */
