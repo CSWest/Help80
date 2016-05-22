@@ -17,6 +17,10 @@ Supported types:
 * `double`
 * `long double`
 
+Note:
+* type `bool` is reserved for parameters with no value
+* type `std::string` can be used, but is also used for multiple choices parameters
+
 #### How to build the menu
         
 First you can specify a description of your program, and how to use it with the functions:
