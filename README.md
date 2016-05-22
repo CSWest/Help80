@@ -1,5 +1,7 @@
 # Help80
 
+![Screenshot](media/Screenshot.png)
+
 The classes defined in this project can be used for parameters parsing and display, while making sure the help menu looks nice on terminals. The name comes from the default width of terminals. Indeed, most terminals have a default width of 80 characters.
 
 ### Features
