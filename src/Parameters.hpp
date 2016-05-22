@@ -81,6 +81,7 @@ FILE
 #define Parameters_hpp
 
 #include <iostream>
+#include <limits>
 #include <map>
 #include <set>
 #include <vector>
@@ -238,6 +239,36 @@ const T Parameters::num_val(const std::string& param_name, const int value_numbe
             if(p->type_name==typeid(int).name()) {
                 /* reinterpret with the good type */
                 Param<int>* const p_reint = dynamic_cast<Param<int>* const>(p);
+                /* return value */
+                return p_reint->values[value_number-1];
+            }
+            if(p->type_name==typeid(long int).name()) {
+                /* reinterpret with the good type */
+                Param<long int>* const p_reint = dynamic_cast<Param<long int>* const>(p);
+                /* return value */
+                return p_reint->values[value_number-1];
+            }
+            if(p->type_name==typeid(long long int).name()) {
+                /* reinterpret with the good type */
+                Param<long long int>* const p_reint = dynamic_cast<Param<long long int>* const>(p);
+                /* return value */
+                return p_reint->values[value_number-1];
+            }
+            if(p->type_name==typeid(unsigned long int).name()) {
+                /* reinterpret with the good type */
+                Param<unsigned long int>* const p_reint = dynamic_cast<Param<unsigned long int>* const>(p);
+                /* return value */
+                return p_reint->values[value_number-1];
+            }
+            if(p->type_name==typeid(unsigned long long int).name()) {
+                /* reinterpret with the good type */
+                Param<unsigned long long int>* const p_reint = dynamic_cast<Param<unsigned long long int>* const>(p);
+                /* return value */
+                return p_reint->values[value_number-1];
+            }
+            else if(p->type_name==typeid(float).name()) {
+                /* reinterpret with the good type */
+                Param<float>* const p_reint = dynamic_cast<Param<float>* const>(p);
                 /* return value */
                 return p_reint->values[value_number-1];
             }

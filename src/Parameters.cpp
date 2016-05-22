@@ -283,6 +283,46 @@ void Parameters::print_parameters() const {
                 for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
                 std::cout << std::endl;
             }
+            if(p->type_name==typeid(long int).name()) {
+                /* reinterpret with the good type */
+                const Param<long int>* const p_reint = dynamic_cast<Param<long int>* const>(p);
+                if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
+                else              std::cout << desc_indent << "Default:";
+                for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
+                std::cout << std::endl;
+            }
+            if(p->type_name==typeid(long long int).name()) {
+                /* reinterpret with the good type */
+                const Param<long long int>* const p_reint = dynamic_cast<Param<long long int>* const>(p);
+                if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
+                else              std::cout << desc_indent << "Default:";
+                for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
+                std::cout << std::endl;
+            }
+            if(p->type_name==typeid(unsigned long int).name()) {
+                /* reinterpret with the good type */
+                const Param<unsigned long int>* const p_reint = dynamic_cast<Param<unsigned long int>* const>(p);
+                if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
+                else              std::cout << desc_indent << "Default:";
+                for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
+                std::cout << std::endl;
+            }
+            if(p->type_name==typeid(unsigned long long int).name()) {
+                /* reinterpret with the good type */
+                const Param<unsigned long long int>* const p_reint = dynamic_cast<Param<unsigned long long int>* const>(p);
+                if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
+                else              std::cout << desc_indent << "Default:";
+                for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
+                std::cout << std::endl;
+            }
+            else if(p->type_name==typeid(float).name()) {
+                /* reinterpret with the good type */
+                const Param<float>* const p_reint = dynamic_cast<Param<float>* const>(p);
+                if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
+                else              std::cout << desc_indent << "Default:";
+                for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
+                std::cout << std::endl;
+            }
             else if(p->type_name==typeid(double).name()) {
                 /* reinterpret with the good type */
                 const Param<double>* const p_reint = dynamic_cast<Param<double>* const>(p);
@@ -337,9 +377,15 @@ void Parameters::parse_params() {
                         Param<int>* const p_reint = dynamic_cast<Param<int>* const>(p);
                         /* update value */
                         try { p_reint->values[j] = std::stoi(arg_value); }
-                        catch(const std::exception& e) {
+                        catch(const std::invalid_argument& e) {
                             if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" attend une valeur entière, et a reçu \"" << arg_value << "\"";
                             else              std::cerr << "parameter \"" << line_param << "\" expects an integer value, received \"" << arg_value << "\"";
+                        }
+                        catch(const std::out_of_range& e) {
+                            int max = std::numeric_limits<int>::max();
+                            int min = std::numeric_limits<int>::min();
+                            if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" doit être compris entre " << min << " et " << max << " mais a reçu " << arg_value;
+                            else              std::cerr << "parameter \"" << line_param << "\" must be between " << min << " and " << max << " but received " << arg_value;
                         }
                     }
                     if(p->type_name==typeid(long int).name()) {
@@ -347,9 +393,15 @@ void Parameters::parse_params() {
                         Param<long int>* const p_reint = dynamic_cast<Param<long int>* const>(p);
                         /* update value */
                         try { p_reint->values[j] = std::stol(arg_value); }
-                        catch(const std::exception& e) {
+                        catch(const std::invalid_argument& e) {
                             if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" attend une valeur entière, et a reçu \"" << arg_value << "\"";
                             else              std::cerr << "parameter \"" << line_param << "\" expects an integer value, received \"" << arg_value << "\"";
+                        }
+                        catch(const std::out_of_range& e) {
+                            long int max = std::numeric_limits<long int>::max();
+                            long int min = std::numeric_limits<long int>::min();
+                            if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" doit être compris entre " << min << " et " << max << " mais a reçu " << arg_value;
+                            else              std::cerr << "parameter \"" << line_param << "\" must be between " << min << " and " << max << " but received " << arg_value;
                         }
                     }
                     if(p->type_name==typeid(long long int).name()) {
@@ -357,9 +409,15 @@ void Parameters::parse_params() {
                         Param<long long int>* const p_reint = dynamic_cast<Param<long long int>* const>(p);
                         /* update value */
                         try { p_reint->values[j] = std::stoll(arg_value); }
-                        catch(const std::exception& e) {
+                        catch(const std::invalid_argument& e) {
                             if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" attend une valeur entière, et a reçu \"" << arg_value << "\"";
                             else              std::cerr << "parameter \"" << line_param << "\" expects an integer value, received \"" << arg_value << "\"";
+                        }
+                        catch(const std::out_of_range& e) {
+                            long long int max = std::numeric_limits<long long int>::max();
+                            long long int min = std::numeric_limits<long long int>::min();
+                            if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" doit être compris entre " << min << " et " << max << " mais a reçu " << arg_value;
+                            else              std::cerr << "parameter \"" << line_param << "\" must be between " << min << " and " << max << " but received " << arg_value;
                         }
                     }
                     if(p->type_name==typeid(unsigned long int).name()) {
@@ -367,9 +425,15 @@ void Parameters::parse_params() {
                         Param<unsigned long int>* const p_reint = dynamic_cast<Param<unsigned long int>* const>(p);
                         /* update value */
                         try { p_reint->values[j] = std::stoul(arg_value); }
-                        catch(const std::exception& e) {
+                        catch(const std::invalid_argument& e) {
                             if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" attend une valeur entière, et a reçu \"" << arg_value << "\"";
                             else              std::cerr << "parameter \"" << line_param << "\" expects an integer value, received \"" << arg_value << "\"";
+                        }
+                        catch(const std::out_of_range& e) {
+                            unsigned long int max = std::numeric_limits<unsigned long int>::max();
+                            unsigned long int min = std::numeric_limits<unsigned long int>::min();
+                            if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" doit être compris entre " << min << " et " << max << " mais a reçu " << arg_value;
+                            else              std::cerr << "parameter \"" << line_param << "\" must be between " << min << " and " << max << " but received " << arg_value;
                         }
                     }
                     if(p->type_name==typeid(unsigned long long int).name()) {
@@ -377,9 +441,15 @@ void Parameters::parse_params() {
                         Param<unsigned long long int>* const p_reint = dynamic_cast<Param<unsigned long long int>* const>(p);
                         /* update value */
                         try { p_reint->values[j] = std::stoull(arg_value); }
-                        catch(const std::exception& e) {
+                        catch(const std::invalid_argument& e) {
                             if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" attend une valeur entière, et a reçu \"" << arg_value << "\"";
                             else              std::cerr << "parameter \"" << line_param << "\" expects an integer value, received \"" << arg_value << "\"";
+                        }
+                        catch(const std::out_of_range& e) {
+                            unsigned long long int max = std::numeric_limits<unsigned long long int>::max();
+                            unsigned long long int min = std::numeric_limits<unsigned long long int>::min();
+                            if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" doit être compris entre " << min << " et " << max << " mais a reçu " << arg_value;
+                            else              std::cerr << "parameter \"" << line_param << "\" must be between " << min << " and " << max << " but received " << arg_value;
                         }
                     }
                     else if(p->type_name==typeid(float).name()) {
@@ -387,9 +457,15 @@ void Parameters::parse_params() {
                         Param<float>* const p_reint = dynamic_cast<Param<float>* const>(p);
                         /* update value */
                         try { p_reint->values[j] = std::stof(arg_value); }
-                        catch(const std::exception& e) {
+                        catch(const std::invalid_argument& e) {
                             if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" attend une valeur entière, et a reçu \"" << arg_value << "\"";
                             else              std::cerr << "parameter \"" << line_param << "\" expects an integer value, received \"" << arg_value << "\"";
+                        }
+                        catch(const std::out_of_range& e) {
+                            float max = std::numeric_limits<float>::max();
+                            float min = std::numeric_limits<float>::min();
+                            if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" doit être compris entre " << min << " et " << max << " mais a reçu " << arg_value;
+                            else              std::cerr << "parameter \"" << line_param << "\" must be between " << min << " and " << max << " but received " << arg_value;
                         }
                     }
                     else if(p->type_name==typeid(double).name()) {
@@ -397,9 +473,15 @@ void Parameters::parse_params() {
                         Param<double>* const p_reint = dynamic_cast<Param<double>* const>(p);
                         /* update value */
                         try { p_reint->values[j] = std::stod(arg_value); }
-                        catch(const std::exception& e) {
+                        catch(const std::invalid_argument& e) {
                             if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" attend une valeur entière, et a reçu \"" << arg_value << "\"";
                             else              std::cerr << "parameter \"" << line_param << "\" expects an integer value, received \"" << arg_value << "\"";
+                        }
+                        catch(const std::out_of_range& e) {
+                            double max = std::numeric_limits<double>::max();
+                            double min = std::numeric_limits<double>::min();
+                            if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" doit être compris entre " << min << " et " << max << " mais a reçu " << arg_value;
+                            else              std::cerr << "parameter \"" << line_param << "\" must be between " << min << " and " << max << " but received " << arg_value;
                         }
                     }
                     else if(p->type_name==typeid(long double).name()) {
@@ -407,9 +489,15 @@ void Parameters::parse_params() {
                         Param<long double>* const p_reint = dynamic_cast<Param<long double>* const>(p);
                         /* update value */
                         try { p_reint->values[j] = std::stold(arg_value); }
-                        catch(const std::exception& e) {
+                        catch(const std::invalid_argument& e) {
                             if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" attend une valeur entière, et a reçu \"" << arg_value << "\"";
                             else              std::cerr << "parameter \"" << line_param << "\" expects an integer value, received \"" << arg_value << "\"";
+                        }
+                        catch(const std::out_of_range& e) {
+                            long double max = std::numeric_limits<long double>::max();
+                            long double min = std::numeric_limits<long double>::min();
+                            if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" doit être compris entre " << min << " et " << max << " mais a reçu " << arg_value;
+                            else              std::cerr << "parameter \"" << line_param << "\" must be between " << min << " and " << max << " but received " << arg_value;
                         }
                     }
                     else if(p->type_name==typeid(std::string).name()) {
