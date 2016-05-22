@@ -167,11 +167,14 @@ class Parameters {
         typedef std::map<std::string, vec_choices>        map_choices;
         typedef std::map<size_t, std::string>             map_order;
     
-        template<typename T>
-        void                     print_def(ParamHolder* const, const bool=false) const;   // prints default value
-        void                     print_description()                             const;   // print program description
-        void                     print_usage()                                   const;   // print usage
-        void                     print_parameters()                              const;   // print list of parameters
+    
+        template<typename T> void pr_def(ParamHolder* const, const bool=false)   const;   // prints default value
+        template<typename T> void pr_ran(const std::string&, const std::string&) const;   // prints expected range
+        void                      pr_exi(const std::string&, const std::string&) const;   // prints expected an integer value
+        void                      pr_exd(const std::string&, const std::string&) const;   // prints expected a decimal value
+        void                      print_description()                            const;   // print program description
+        void                      print_usage()                                  const;   // print usage
+        void                      print_parameters()                             const;   // print list of parameters
     
         Parameters(const Parameters&);
         Parameters& operator=(const Parameters&);
@@ -263,7 +266,7 @@ class Parameters {
 /*** template functions definition ***/
 
 template<typename T>
-void Parameters::print_def(ParamHolder* const p, const bool add_quotes) const {
+void Parameters::pr_def(ParamHolder* const p, const bool add_quotes) const {
     if(typeid(T).name()!=typeid(int                   ).name() && typeid(T).name()!=typeid(long int         ).name()
     && typeid(T).name()!=typeid(long long int         ).name() && typeid(T).name()!=typeid(unsigned long int).name()
     && typeid(T).name()!=typeid(unsigned long long int).name() && typeid(T).name()!=typeid(float            ).name()
@@ -282,6 +285,14 @@ void Parameters::print_def(ParamHolder* const p, const bool add_quotes) const {
         }
         std::cout << std::endl;
     }
+}
+
+template<typename T>
+void Parameters::pr_ran(const std::string& line_param, const std::string& arg_value) const {
+    T max = std::numeric_limits<T>::max();
+    T min = std::numeric_limits<T>::min();
+    if(lang==lang_fr) std::cerr << "le paramètre \"" << line_param << "\" doit être compris entre " << min << " et " << max << " mais a reçu " << arg_value;
+    else              std::cerr << "parameter \"" << line_param << "\" must be between " << min << " and " << max << " but received " << arg_value;
 }
 
 template<typename T>
