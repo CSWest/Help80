@@ -6,6 +6,17 @@ The classes defined in this project can be used for parameters parsing and displ
 
 To use the classes in your own project, just include the files [*Parameters.hpp*](src/Parameters.hpp) and [*Parameters.cpp*](src/Parameters.cpp) in your project.
 
+Supported types:
+* `std::string`
+* `int`
+* `long int`
+* `long long int`
+* `unsigned long int`
+* `unsigned long long int`
+* `float`
+* `double`
+* `long double`
+
 #### How to build the menu
         
 First you can specify a description of your program, and how to use it with the functions:
