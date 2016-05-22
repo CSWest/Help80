@@ -1,6 +1,6 @@
 # Help80
 
-DESCRIPTION
+The classes defined in this project can be used for parameters parsing and display, while making sure the help menu looks nice on terminals.
 
 ### Use
 
