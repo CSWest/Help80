@@ -30,7 +30,7 @@ LICENSE
 int main(int argc, char** argv) {
 
     /* create object */
-    Parameters::config p_c {80, 3, 22, 3, 3, Parameters::lang_us};
+    Parameters::config p_c {80, 2, 13, 5, 3, 10, 2, Parameters::lang_us};
     Parameters p(argc, argv, p_c);
     
     /* set program description and usage */
@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
                              {{"first_mode", "this mode is the first available mode. The description of the choices also fits in the terminal."},
                               {"second_mode", "this mode is another available mode. This is the default mode, as printed just below."},
                               {"third_mode", "the third mode. If_there_is_a_really_long_word_that_wouldnt_fit_on_one_line_it_is_split_at_the_end_of_this_line_and_this_works_on_multiple_lines."},
-                              {"fourth_mode_super_long", "last one. If_there_is_a_long_word that would fit on the next line, it goes on the next line."}},
+                              {"fourth_mode_super_super_long", "last one. If_there_is_a_long_word that would fit on the next line, it goes on the next line."}},
                           "You can also define multiple choices parameters. You need to give the multiple choices in an array of pairs (choice, choice_description):", true);
     
     /* new subsection */

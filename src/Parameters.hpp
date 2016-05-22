@@ -99,9 +99,11 @@ class Parameters {
         struct config {
             const int   terminal_width;                                                   // the width of the terminal
             const int   param_to_desc_len;                                                // nb of spaces between longest param list and descripton
-            const int   desc_indent_len;                                                  // nb of characters form the left to print description
+            const int   desc_indent_len;                                                  // nb of characters from the left to print description
             const int   params_indent_len;                                                // nb of characters from the left to print param+values
             const int   choice_indent_len;                                                // indentation for choices descriptions
+            const int   choice_desc_indent_len;                                           // indentation for choice description
+            const int   right_margin_len;                                                 // nb of chars from the right of the terminal
             LANG        lang;                                                             // language to print the menu in
         };
     
@@ -152,7 +154,9 @@ class Parameters {
         const int                param_to_desc_len;                                       // nb of spaces between longest param list and descripton
         const int                desc_indent_len;                                         // nb of characters form the left to print desccription
         const int                params_indent_len;                                       // nb of characters from the left to print param+values
-        const int                choice_indent_len;                                       // indentation for choices descriptions
+        const int                choice_indent_len;                                       // indentation for choices
+        const int                choice_desc_indent_len;                                  // indentation for choices descriptions
+        const int                right_margin_len;                                        // nb of chars from the right of the terminal
         std::string              desc_indent;                                             // spaces for indentation of big description
         std::string              choice_indent;                                           // indentation for choices descriptions
         std::string              params_indent;                                           // string of 'params_indent_len' spaces

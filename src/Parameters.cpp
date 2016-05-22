@@ -34,6 +34,8 @@ Parameters::Parameters(const int p_argc, char const* const* const p_argv, config
     desc_indent_len(p_c.desc_indent_len),
     params_indent_len(p_c.params_indent_len),
     choice_indent_len(p_c.choice_indent_len),
+    choice_desc_indent_len(p_c.choice_desc_indent_len),
+    right_margin_len(p_c.right_margin_len),
     desc_indent(""),
     choice_indent(""),
     params_indent(""),
@@ -110,30 +112,47 @@ void Parameters::print_help(const bool p_print_usage, const bool p_print_descrip
 
 void Parameters::print_description() const {
     std::cout << std::endl;
+    /* print description */
     std::string line       = "";
     std::string word       = "";
+    bool        first_l    = true;
     bool        first_word = true;
-    for(std::size_t i=0 ; i<description.length() ; i++) {
-        char c = description.at(i);
-        if(c!=' ') {
+    for(std::size_t j=0 ; j<description.length() ; j++) {
+        char c = description.at(j);
+        if(c!=' ' && params_indent_len+word.length()<terminal_width-right_margin_len) {
             word += c;
         }
         else {
-            if(line.length()+word.length()+1<=terminal_width) {
+            if(params_indent_len+line.length()+word.length()+1<=terminal_width-right_margin_len) {
                 if(first_word) { line = word; first_word = false; }
                 else           { line += " " + word; }
                 word = "";
             }
             else {
                 /* line would be too long, print it */
-                std::cout << line << std::endl;
-                line = word;
-                word = "";
+                std::cout << params_indent;
+                if(params_indent_len+word.length()<terminal_width-right_margin_len) {
+                    /* prints line and take a new line */
+                    std::cout << line << std::endl;
+                    line = word;
+                    word = "";
+                }
+                else {
+                    /* no need to take another line, the word will be split anyways */
+                    std::size_t line_len;
+                    if(line!="") { std::cout << line << " "; line_len = line.length() + 1; }
+                    else         { line_len = 0; }
+                    std::cout << word.substr(0, terminal_width-right_margin_len-(params_indent_len+line_len)) << std::endl;
+                    word = word.substr(terminal_width-right_margin_len-(params_indent_len+line_len));
+                    word.push_back(c);
+                    line       = "";
+                    first_word = true;
+                }
             }
         }
     }
     /* print last line */
-    std::cout << line << std::endl;
+    std::cout << params_indent << line << std::endl;
 }
 
 void Parameters::print_usage() const {
@@ -180,11 +199,11 @@ void Parameters::print_parameters() const {
         bool        first_word = true;
         for(std::size_t j=0 ; j<p->description.length() ; j++) {
             char c = p->description.at(j);
-            if(c!=' ' && desc_indent_len+word.length()<terminal_width) {
+            if(c!=' ' && desc_indent_len+word.length()<terminal_width-right_margin_len) {
                 word += c;
             }
             else {
-                if(desc_indent_len+line.length()+word.length()+1<=terminal_width) {
+                if(desc_indent_len+line.length()+word.length()+1<=terminal_width-right_margin_len) {
                     if(first_word) { line = word; first_word = false; }
                     else           { line += " " + word; }
                     word = "";
@@ -193,7 +212,7 @@ void Parameters::print_parameters() const {
                     /* line would be too long, print it */
                     if(!first_l || desc_on_new_line) std::cout << desc_indent;
                     if(first_l)                      first_l = false;
-                    if(desc_indent_len+word.length()<terminal_width) {
+                    if(desc_indent_len+word.length()<terminal_width-right_margin_len) {
                         /* prints line and take a new line */
                         std::cout << line << std::endl;
                         line = word;
@@ -204,8 +223,8 @@ void Parameters::print_parameters() const {
                         std::size_t line_len;
                         if(line!="") { std::cout << line << " "; line_len = line.length() + 1; }
                         else         { line_len = 0; }
-                        std::cout << word.substr(0, terminal_width-(desc_indent_len+line_len)) << std::endl;
-                        word = word.substr(terminal_width-(desc_indent_len+line_len));
+                        std::cout << word.substr(0, terminal_width-right_margin_len-(desc_indent_len+line_len)) << std::endl;
+                        word = word.substr(terminal_width-right_margin_len-(desc_indent_len+line_len));
                         word.push_back(c);
                         line       = "";
                         first_word = true;
@@ -221,33 +240,44 @@ void Parameters::print_parameters() const {
         if(choices_params.count(p->name)) {
             for(const std::pair<std::string, std::string>& p: choices.at(p->name)) {
                 /* print choice */
-                if(lang==lang_fr) std::cout << desc_indent << choice_indent << "\"" << p.first << "\" : ";
-                else              std::cout << desc_indent << choice_indent << "\"" << p.first << "\": ";
+                std::size_t other_len    = (lang==lang_fr) ? 5+p.first.length() : 4+p.first.length();
+                bool        sub_desc_onl = false;
+                if(other_len+choice_indent_len>30) {
+                    /* print choice and new line */
+                    if(lang==lang_fr) std::cout << desc_indent << choice_indent << "\"" << p.first << "\" :" << std::endl;
+                    else              std::cout << desc_indent << choice_indent << "\"" << p.first << "\":" << std::endl;
+                    sub_desc_onl = true;
+                    other_len    = choice_indent_len+choice_desc_indent_len;
+                }
+                else {
+                    /* print choice */
+                    if(lang==lang_fr) std::cout << desc_indent << choice_indent << "\"" << p.first << "\" : ";
+                    else              std::cout << desc_indent << choice_indent << "\"" << p.first << "\": ";
+                }
                 /* print choice description */
                 /* print description */
-                const std::size_t other_len  = (lang==lang_fr) ? 5+p.first.length() : 4+p.first.length();
-                std::string       spaces     = desc_indent + choice_indent;
-                std::string       line       = "";
-                std::string       word       = "";
-                bool              first_l    = true;
-                bool              first_word = true;
+                std::string spaces     = desc_indent + choice_indent;
+                std::string line       = "";
+                std::string word       = "";
+                bool        first_l    = true;
+                bool        first_word = true;
                 for(int j=0 ; j<other_len ; j++) spaces += " ";
                 for(std::size_t j=0 ; j<p.second.length() ; j++) {
                     char c = p.second.at(j);
-                    if(c!=' ' && desc_indent_len+choice_indent_len+other_len+word.length()<terminal_width) {
+                    if(c!=' ' && desc_indent_len+choice_indent_len+other_len+word.length()<terminal_width-right_margin_len) {
                         word += c;
                     }
                     else {
-                        if(desc_indent_len+choice_indent_len+other_len+line.length()+word.length()+1<=terminal_width) {
+                        if(desc_indent_len+choice_indent_len+other_len+line.length()+word.length()+1<=terminal_width-right_margin_len) {
                             if(first_word) { line = word; first_word = false; }
                             else           { line += " " + word; }
                             word = "";
                         }
                         else {
                             /* line would be too long, print it */
-                            if(!first_l || desc_on_new_line) std::cout << spaces;
+                            if(!first_l || sub_desc_onl) std::cout << spaces;
                             if(first_l)                      first_l = false;
-                            if(desc_indent_len+choice_indent_len+other_len+word.length()<terminal_width) {
+                            if(desc_indent_len+choice_indent_len+other_len+word.length()<terminal_width-right_margin_len) {
                                 /* prints line and take a new line */
                                 std::cout << line << std::endl;
                                 line = word;
@@ -258,8 +288,8 @@ void Parameters::print_parameters() const {
                                 std::size_t line_len;
                                 if(line!="") { std::cout << line << " "; line_len = line.length() + 1; }
                                 else         { line_len = 0; }
-                                std::cout << word.substr(0, terminal_width-(desc_indent_len+choice_indent_len+other_len+line_len)) << std::endl;
-                                word = word.substr(terminal_width-(desc_indent_len+choice_indent_len+other_len+line_len));
+                                std::cout << word.substr(0, terminal_width-right_margin_len-(desc_indent_len+choice_indent_len+other_len+line_len)) << std::endl;
+                                word = word.substr(terminal_width-right_margin_len-(desc_indent_len+choice_indent_len+other_len+line_len));
                                 word.push_back(c);
                                 line       = "";
                                 first_word = true;
@@ -268,7 +298,7 @@ void Parameters::print_parameters() const {
                     }
                 }
                 /* print last line */
-                if(!first_l || desc_on_new_line) std::cout << spaces;
+                if(!first_l || sub_desc_onl) std::cout << spaces;
                 std::cout << line << std::endl;
             }
         }
@@ -345,12 +375,6 @@ void Parameters::print_parameters() const {
                 else              std::cout << desc_indent << "Default:";
                 for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " \"" << p_reint->def_values[j] << "\""; if(j<p->nb_values-1) std::cout << "\","; }
                 std::cout << std::endl;
-            }
-            else if(p->type_name==typeid(bool).name()) {
-                /* parameters with no value */
-            }
-            else {
-                /* unknown type */
             }
         }
         
