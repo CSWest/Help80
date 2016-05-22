@@ -87,7 +87,7 @@ FILE
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR   -1
 
-/* Platform detection */
+/* platform detection */
 #if defined(_WIN32)
     #define PLATFORM PLATFORM_WINDOWS
 #elif defined(__APPLE__)
@@ -96,6 +96,7 @@ FILE
     #define PLATFORM PLATFORM_UNIX
 #endif
 
+/* headers for terminal width */
 #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
     #include <sys/ioctl.h>
     #include <stdio.h>
@@ -104,6 +105,7 @@ FILE
     #include <windows.h>
 #endif
 
+/* other headers */
 #include <iostream>
 #include <limits>
 #include <map>
@@ -170,6 +172,9 @@ class Parameters {
         void                     print_description() const;                               // print program description
         void                     print_usage()       const;                               // print usage
         void                     print_parameters()  const;                               // print list of parameters
+    
+        template<typename T>
+        void print_default_value(ParamHolder* const, const bool=false) const;
     
         Parameters(const Parameters&);
         Parameters& operator=(const Parameters&);
@@ -263,6 +268,19 @@ class Parameters {
 /*** template functions definition ***/
 
 template<typename T>
+void Parameters::print_default_value(ParamHolder* const p, const bool add_quotes) const {
+    /* reinterpret with the good type */
+    const Param<T>* const p_reint = dynamic_cast<Param<T>* const>(p);
+    if(lang==lang_fr) std::cout << desc_indent << bold("Défaut :");
+    else              std::cout << desc_indent << bold("Default:");
+    for(std::size_t j=0 ; j<p->nb_values ; j++) {
+        if(!add_quotes) std::cout << " "   << p_reint->def_values[j];         if(j<p->nb_values-1) std::cout << ",";
+        else            std::cout << " \"" << p_reint->def_values[j] << "\""; if(j<p->nb_values-1) std::cout << ",";
+    }
+    std::cout << std::endl;
+}
+
+template<typename T>
 const T Parameters::num_val(const std::string& param_name, const int value_number) const {
     if(params.count("--" + param_name)) {
         Parameters::ParamHolder* const p = params.at("--" + param_name);
@@ -270,57 +288,10 @@ const T Parameters::num_val(const std::string& param_name, const int value_numbe
             throw std::string("parameter \"--" + param_name + "\" only has " + std::to_string(p->nb_values) + " values");
         }
         else {
-            if(p->type_name==typeid(int).name()) {
-                /* reinterpret with the good type */
-                Param<int>* const p_reint = dynamic_cast<Param<int>* const>(p);
-                /* return value */
-                return p_reint->values[value_number-1];
-            }
-            else if(p->type_name==typeid(long int).name()) {
-                /* reinterpret with the good type */
-                Param<long int>* const p_reint = dynamic_cast<Param<long int>* const>(p);
-                /* return value */
-                return p_reint->values[value_number-1];
-            }
-            else if(p->type_name==typeid(long long int).name()) {
-                /* reinterpret with the good type */
-                Param<long long int>* const p_reint = dynamic_cast<Param<long long int>* const>(p);
-                /* return value */
-                return p_reint->values[value_number-1];
-            }
-            else if(p->type_name==typeid(unsigned long int).name()) {
-                /* reinterpret with the good type */
-                Param<unsigned long int>* const p_reint = dynamic_cast<Param<unsigned long int>* const>(p);
-                /* return value */
-                return p_reint->values[value_number-1];
-            }
-            else if(p->type_name==typeid(unsigned long long int).name()) {
-                /* reinterpret with the good type */
-                Param<unsigned long long int>* const p_reint = dynamic_cast<Param<unsigned long long int>* const>(p);
-                /* return value */
-                return p_reint->values[value_number-1];
-            }
-            else if(p->type_name==typeid(float).name()) {
-                /* reinterpret with the good type */
-                Param<float>* const p_reint = dynamic_cast<Param<float>* const>(p);
-                /* return value */
-                return p_reint->values[value_number-1];
-            }
-            else if(p->type_name==typeid(double).name()) {
-                /* reinterpret with the good type */
-                Param<double>* const p_reint = dynamic_cast<Param<double>* const>(p);
-                /* return value */
-                return p_reint->values[value_number-1];
-            }
-            else if(p->type_name==typeid(long double).name()) {
-                /* reinterpret with the good type */
-                Param<long double>* const p_reint = dynamic_cast<Param<long double>* const>(p);
-                /* return value */
-                return p_reint->values[value_number-1];
-            }
-            else {
-                throw std::string("type not supported yet");
-            }
+            /* reinterpret with the good type */
+            Param<T>* const p_reint = dynamic_cast<Param<T>* const>(p);
+            /* return value */
+            return p_reint->values[value_number-1];
         }
     }
     else {

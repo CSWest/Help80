@@ -350,77 +350,15 @@ void Parameters::print_parameters() const {
         
         /* print default value */
         if(p->display_default_value) {
-            if(p->type_name==typeid(int).name()) {
-                /* reinterpret with the good type */
-                const Param<int>* const p_reint = dynamic_cast<Param<int>* const>(p);
-                if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
-                else              std::cout << desc_indent << "Default:";
-                for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
-                std::cout << std::endl;
-            }
-            else if(p->type_name==typeid(long int).name()) {
-                /* reinterpret with the good type */
-                const Param<long int>* const p_reint = dynamic_cast<Param<long int>* const>(p);
-                if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
-                else              std::cout << desc_indent << "Default:";
-                for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
-                std::cout << std::endl;
-            }
-            else if(p->type_name==typeid(long long int).name()) {
-                /* reinterpret with the good type */
-                const Param<long long int>* const p_reint = dynamic_cast<Param<long long int>* const>(p);
-                if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
-                else              std::cout << desc_indent << "Default:";
-                for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
-                std::cout << std::endl;
-            }
-            else if(p->type_name==typeid(unsigned long int).name()) {
-                /* reinterpret with the good type */
-                const Param<unsigned long int>* const p_reint = dynamic_cast<Param<unsigned long int>* const>(p);
-                if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
-                else              std::cout << desc_indent << "Default:";
-                for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
-                std::cout << std::endl;
-            }
-            else if(p->type_name==typeid(unsigned long long int).name()) {
-                /* reinterpret with the good type */
-                const Param<unsigned long long int>* const p_reint = dynamic_cast<Param<unsigned long long int>* const>(p);
-                if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
-                else              std::cout << desc_indent << "Default:";
-                for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
-                std::cout << std::endl;
-            }
-            else if(p->type_name==typeid(float).name()) {
-                /* reinterpret with the good type */
-                const Param<float>* const p_reint = dynamic_cast<Param<float>* const>(p);
-                if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
-                else              std::cout << desc_indent << "Default:";
-                for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
-                std::cout << std::endl;
-            }
-            else if(p->type_name==typeid(double).name()) {
-                /* reinterpret with the good type */
-                const Param<double>* const p_reint = dynamic_cast<Param<double>* const>(p);
-                if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
-                else              std::cout << desc_indent << "Default:";
-                for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
-                std::cout << std::endl;
-            }
-            else if(p->type_name==typeid(long double).name()) {
-                /* reinterpret with the good type */
-                const Param<long double>* const p_reint = dynamic_cast<Param<long double>* const>(p);
-                if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
-                else              std::cout << desc_indent << "Default:";
-                for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " " << p_reint->def_values[j]; if(j<p->nb_values-1) std::cout << ","; }
-                std::cout << std::endl;
-            }
-            else if(p->type_name==typeid(std::string).name()) {
-                const Param<std::string>* const p_reint = dynamic_cast<Param<std::string>* const>(p);
-                if(lang==lang_fr) std::cout << desc_indent << "Défaut :";
-                else              std::cout << desc_indent << "Default:";
-                for(std::size_t j=0 ; j<p->nb_values ; j++) { std::cout << " \"" << p_reint->def_values[j] << "\""; if(j<p->nb_values-1) std::cout << "\","; }
-                std::cout << std::endl;
-            }
+            if(p->type_name==typeid(int).name())                         print_default_value<int>(p);
+            else if(p->type_name==typeid(long int).name())               print_default_value<long int>(p);
+            else if(p->type_name==typeid(long long int).name())          print_default_value<long long int>(p);
+            else if(p->type_name==typeid(unsigned long int).name())      print_default_value<unsigned long int>(p);
+            else if(p->type_name==typeid(unsigned long long int).name()) print_default_value<unsigned long long int>(p);
+            else if(p->type_name==typeid(float).name())                  print_default_value<float>(p);
+            else if(p->type_name==typeid(double).name())                 print_default_value<double>(p);
+            else if(p->type_name==typeid(long double).name())            print_default_value<long double>(p);
+            else if(p->type_name==typeid(std::string).name())            print_default_value<std::string>(p, true);
         }
         
         /* skip line */
