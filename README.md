@@ -33,14 +33,14 @@ Note:
 #### Create the `Parameters` object
 
 When you create the `Parameters` object, you need to pass a `Parameters::config` structure to its constructor. This structure defines all the indentation and dimensions of the help menu. The structure has the following fields:
-* `const int max_terminal_width`: the maximum width that the help menu can take. If the terminal is full screen, using 100% of its width can lead to long lines that are hard to read. This parameter should be around 90-120.
-* `const int params_indent_len`: number of characters between the left side of the terminal and the list of parameters.
-* `const int param_to_desc_len`: minimal number of characters between the end of a parameter's name and its description. If this space is not respected, the description begins on a new line.
-* `const int desc_indent_len`: number of characters between the left side of the terminal and the paragraph that describes the parameters.
-* `const int choice_indent_len`: indentation of the available choices for multiple choices parameters.
-* `const int choice_desc_indent_len`: indentation of the choices' description from the choice's name.
-* `const int right_margin_len`: number of characters between last character on screen and right side of the terminal.
-* `LANG      lang`: (`lang_fr` or `lang_us`) this allows to adapt to the differences of these two languages. 
+1. `const int max_terminal_width`: the maximum width that the help menu can take. If the terminal is full screen, using 100% of its width can lead to long lines that are hard to read. This parameter should be around 90-120.
+1. `const int params_indent_len`: number of characters between the left side of the terminal and the list of parameters.
+1. `const int param_to_desc_len`: minimal number of characters between the end of a parameter's name and its description. If this space is not respected, the description begins on a new line.
+1. `const int desc_indent_len`: number of characters between the left side of the terminal and the paragraph that describes the parameters.
+1. `const int choice_indent_len`: indentation of the available choices for multiple choices parameters.
+1. `const int choice_desc_indent_len`: indentation of the choices' description from the choice's name.
+1. `const int right_margin_len`: number of characters between last character on screen and right side of the terminal.
+1. `LANG      lang`: (`lang_fr` or `lang_us`) this allows to adapt to the differences of these two languages. 
 
 Then two constructors are available:
 * `Parameters(const int, char const* const* const, config)`: the help menu width will be the minimum between `max_terminal_width` and the terminal's width.
@@ -56,21 +56,21 @@ First you can specify a description of your program, and how to use it with the 
  
 Then you can use the following functions to define your program's parameters:
 * `define_param` : to define a parameter that doesn't need any value. This function takes two arguments, listed below:
-  * `const std::string&`: the parameter's name.
-  * `const std::string&`: its description.
+  1. `const std::string&`: the parameter's name.
+  1. `const std::string&`: its description.
 * `define_num_str_param`: to define a numeric or `std::string` parameter:
-  * `const std::string&`: the parameter's name.
-  * `const std::vector<std::string>&`: the name of the associated values. This is what will be written between `<` and `>`, like `<value1>` next to the parameter's name.
-  * `const std::vector<T>&`: the default values associated with the above names.
-  * `const std::string&`: the parameter's description.
-  * `const bool=false`: specifies if the default value has to be printed. This will mean to the user that if he does not specify this argument, the default value will be used.
+  1. `const std::string&`: the parameter's name.
+  1. `const std::vector<std::string>&`: the name of the associated values. This is what will be written between `<` and `>`, like `<value1>` next to the parameter's name.
+  1. `const std::vector<T>&`: the default values associated with the above names.
+  1. `const std::string&`: the parameter's description.
+  1. `const bool=false`: specifies if the default value has to be printed. This will mean to the user that if he does not specify this argument, the default value will be used.
 * `define_choice_param`: to define a multiple choice parameter. This is a parameter that can only take a finite set of (`std::string`) values:
-  * `const std::string&`: the parameter's name.
-  * `const std::string&`: the name of the associated value.
-  * `const std::string&`: the default choice.
-  * `vec_choices`: a vector of `std::pairs<std::string, std::string>` where the `first` element is the choice's name, and the `second` element is the choice's description.
-  * `const std::string&`: the parameter's decription.
-  * `const bool`: specifies if the default choice has to be printed.
+  1. `const std::string&`: the parameter's name.
+  1. `const std::string&`: the name of the associated value.
+  1. `const std::string&`: the default choice.
+  1. `vec_choices`: a vector of `std::pairs<std::string, std::string>` where the `first` element is the choice's name, and the `second` element is the choice's description.
+  1. `const std::string&`: the parameter's decription.
+  1. `const bool`: specifies if the default choice has to be printed.
 
 The order in which you define the parameters will be the same as the order of the parameters on the help menu. You can add structure by adding subsections between parameters with function `insert_subsection(const std::string&)`.
 
@@ -79,10 +79,12 @@ When the menu is ready, you can print it with if you wish with `print_help()`. T
 #### Get the entered values
 
 So far, the parameters have only been defined. After a call to `parse_params()` the command line arguments will be parsed and the parameter's values will be updated from their default value to the one provided by the user. If no exception is thrown so far, the command line is correct. You can then use the following functions to retrieve the parameters' values:
-* `is_spec(const std::string&)`: to know if a simple parameter is specified.
-* `num_val(const std::string&, const int=1)`: to get the n-th numeric value of a numeric parameter. The first one is accessed with index 1, the default value.
-* `str_val(const std::string&, const int=1)`: to get the value of a `std::string` parameter. The first one is accessed with index 1, the default value.
-* `cho_val(const std::string&)`: to get the value of a multiple choice parameter.
+|function | description |
+|---------|-------------|
+|`is_spec(const std::string&)`: to know if a simple parameter is specified.|
+|`num_val(const std::string&, const int=1)`: to get the n-th numeric value of a numeric parameter. The first one is accessed with index 1, the default value.\
+|`str_val(const std::string&, const int=1)`: to get the value of a `std::string` parameter. The first one is accessed with index 1, the default value.|
+|`cho_val(const std::string&)`: to get the value of a multiple choice parameter.|
 
 #### Catch the following exceptions
 
