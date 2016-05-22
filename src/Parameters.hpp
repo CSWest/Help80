@@ -80,6 +80,10 @@ FILE
 #ifndef Parameters_hpp
 #define Parameters_hpp
 
+#include <sys/ioctl.h>
+#include <stdio.h>
+#include <unistd.h>
+
 #include <iostream>
 #include <limits>
 #include <map>
@@ -97,18 +101,21 @@ class Parameters {
         enum LANG {lang_fr, lang_us};
     
         struct config {
-            const int   terminal_width;                                                   // the width of the terminal
-            const int   param_to_desc_len;                                                // nb of spaces between longest param list and descripton
-            const int   desc_indent_len;                                                  // nb of characters from the left to print description
-            const int   params_indent_len;                                                // nb of characters from the left to print param+values
-            const int   choice_indent_len;                                                // indentation for choices descriptions
-            const int   choice_desc_indent_len;                                           // indentation for choice description
-            const int   right_margin_len;                                                 // nb of chars from the right of the terminal
-            LANG        lang;                                                             // language to print the menu in
+            const int max_terminal_width;                                                 // max width of terminal
+            const int param_to_desc_len;                                                  // nb of spaces between longest param list and descripton
+            const int desc_indent_len;                                                    // nb of characters from the left to print description
+            const int params_indent_len;                                                  // nb of characters from the left to print param+values
+            const int choice_indent_len;                                                  // indentation for choices descriptions
+            const int choice_desc_indent_len;                                             // indentation for choice description
+            const int right_margin_len;                                                   // nb of chars from the right of the terminal
+            LANG      lang;                                                               // language to print the menu in
         };
     
         Parameters(const int, char const* const* const, config);
+        Parameters(const int, char const* const* const, config, const int);
         ~Parameters();
+    
+        static const int get_terminal_width();                                            // returns current's terminal width
     
         void set_program_description(const std::string&);                                 // sets program description
         void set_usage(const std::string&);                                               // sets usage
@@ -150,6 +157,7 @@ class Parameters {
         char const* const* const argv;                                                    // command line args values
     
         /* display parameters */
+        const int                max_terminal_width;                                      // max width of the terminal
         const int                terminal_width;                                          // the width of the terminal
         const int                param_to_desc_len;                                       // nb of spaces between longest param list and descripton
         const int                desc_indent_len;                                         // nb of characters form the left to print desccription

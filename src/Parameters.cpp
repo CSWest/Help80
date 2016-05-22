@@ -29,7 +29,8 @@ Parameters::Parameters(const int p_argc, char const* const* const p_argv, config
     argc(p_argc),
     argv(p_argv),
 
-    terminal_width(p_c.terminal_width),
+    max_terminal_width(p_c.max_terminal_width),
+    terminal_width(get_terminal_width()<=max_terminal_width ? get_terminal_width() : max_terminal_width),
     param_to_desc_len(p_c.param_to_desc_len),
     desc_indent_len(p_c.desc_indent_len),
     params_indent_len(p_c.params_indent_len),
@@ -45,6 +46,35 @@ Parameters::Parameters(const int p_argc, char const* const* const p_argv, config
     for(int i=0 ; i<params_indent_len ; i++) params_indent += " ";
     for(int i=0 ; i<choice_indent_len ; i++) choice_indent += " ";
     for(int i=0 ; i<desc_indent_len ; i++)   desc_indent += " ";
+}
+
+Parameters::Parameters(const int p_argc, char const* const* const p_argv, config p_c, const int p_terminal_width):
+    argc(p_argc),
+    argv(p_argv),
+
+    max_terminal_width(p_c.max_terminal_width),
+    terminal_width(p_terminal_width<=max_terminal_width ? p_terminal_width : max_terminal_width),
+    param_to_desc_len(p_c.param_to_desc_len),
+    desc_indent_len(p_c.desc_indent_len),
+    params_indent_len(p_c.params_indent_len),
+    choice_indent_len(p_c.choice_indent_len),
+    choice_desc_indent_len(p_c.choice_desc_indent_len),
+    right_margin_len(p_c.right_margin_len),
+    desc_indent(""),
+    choice_indent(""),
+    params_indent(""),
+
+    lang(p_c.lang),
+    description_is_set(false) {
+    for(int i=0 ; i<params_indent_len ; i++) params_indent += " ";
+    for(int i=0 ; i<choice_indent_len ; i++) choice_indent += " ";
+    for(int i=0 ; i<desc_indent_len ; i++)   desc_indent += " ";
+}
+
+const int Parameters::get_terminal_width() {
+    struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+    return w.ws_col;
 }
 
 Parameters::~Parameters() {
