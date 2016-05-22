@@ -150,17 +150,11 @@ void Parameters::print_help(const bool p_print_usage, const bool p_print_descrip
 
 void Parameters::print_description() const {
     std::cout << std::endl;
-    #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
-        if(lang==lang_fr) std::cout << "\e[1m" << "DESCRIPTION :" << "\e[0m" << std::endl;
-        else              std::cout << "\e[1m" << "DESCRIPTION:" << "\e[0m" << std::endl;
-    #else
-        if(lang==lang_fr) std::cout << "DESCRIPTION :" << std::endl;
-        else              std::cout << "DESCRIPTION:" << std::endl;
-    #endif
+    if(lang==lang_fr) std::cout << bold("DESCRIPTION :") << std::endl;
+    else              std::cout << bold("DESCRIPTION:") << std::endl;
     /* print description */
     std::string line       = "";
     std::string word       = "";
-    bool        first_l    = true;
     bool        first_word = true;
     for(std::size_t j=0 ; j<description.length() ; j++) {
         char c = description.at(j);
@@ -202,13 +196,8 @@ void Parameters::print_description() const {
 
 void Parameters::print_usage() const {
     std::cout << std::endl;
-    #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
-        if(lang==lang_fr) std::cout << "\e[1m" << "UTILISATION :" << "\e[0m" << std::endl;
-        else              std::cout << "\e[1m" << "USAGE:" << "\e[0m" << std::endl;
-    #else
-        if(lang==lang_fr) std::cout << "UTILISATION :" << std::endl << std::endl;
-        else              std::cout << "USAGE:" << std::endl << std::endl;
-    #endif
+    if(lang==lang_fr) std::cout << bold("UTILISATION :") << std::endl;
+    else              std::cout << bold("USAGE:") << std::endl;
     std::cout << params_indent << usage << std::endl;
 }
 
@@ -218,32 +207,22 @@ void Parameters::print_parameters() const {
         /* print subsection if needed */
         for(std::size_t j=0 ; j<subs_indexes.size() ; j++) {
             if(subs_indexes[j]==i) {
-                #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
-                    if(lang==lang_fr) std::cout << "\e[1m" << subsections[j] << " :" << "\e[0m" << std::endl;
-                    else              std::cout << "\e[1m" << subsections[j] << ":" << "\e[0m" << std::endl;
-                #else
-                    if(lang==lang_fr) std::cout << subsections[j] << " :" << std::endl;
-                    else              std::cout << subsections[j] << ":" << std::endl;
-                #endif
-                
+                if(lang==lang_fr) std::cout << bold(subsections[j] + " :") << std::endl;
+                else              std::cout << bold(subsections[j] + ":") << std::endl;
             }
         }
         
         /* retrieve param */
         ParamHolder* p = params.at(order.at(i));
         /* build use string */
-        #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
-            std::string use = params_indent + "\e[1m" + p->name + "\e[0m";
-        #else
-            std::string use = params_indent + p->name;
-        #endif
-        for(std::string value_name: p->values_names) use += " <" + value_name + ">";
+        std::string use = params_indent + bold(p->name);
+        for(std::string value_name: p->values_names) use += " <" + underline(value_name) + ">";
         
         /* print param and values to take */
-        bool desc_on_new_line = false;
-        int  len_adjust       = 0;
+        bool        desc_on_new_line = false;
+        std::size_t len_adjust       = 0;
         #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
-            len_adjust = 8;
+            len_adjust = 8 + p->nb_values*8;
         #endif
         if(use.length()-len_adjust+param_to_desc_len>desc_indent_len) {
             /* print param list now if too long */
@@ -310,15 +289,15 @@ void Parameters::print_parameters() const {
                 bool        sub_desc_onl = false;
                 if(other_len+choice_indent_len>30) {
                     /* print choice and new line */
-                    if(lang==lang_fr) std::cout << desc_indent << choice_indent << "\"" << p.first << "\" :" << std::endl;
-                    else              std::cout << desc_indent << choice_indent << "\"" << p.first << "\":" << std::endl;
+                    if(lang==lang_fr) std::cout << desc_indent << choice_indent << "\"" << bold(p.first) << "\" :" << std::endl;
+                    else              std::cout << desc_indent << choice_indent << "\"" << bold(p.first) << "\":" << std::endl;
                     sub_desc_onl = true;
                     other_len    = choice_indent_len+choice_desc_indent_len;
                 }
                 else {
                     /* print choice */
-                    if(lang==lang_fr) std::cout << desc_indent << choice_indent << "\"" << p.first << "\" : ";
-                    else              std::cout << desc_indent << choice_indent << "\"" << p.first << "\": ";
+                    if(lang==lang_fr) std::cout << desc_indent << choice_indent << "\"" << bold(p.first) << "\" : ";
+                    else              std::cout << desc_indent << choice_indent << "\"" << bold(p.first) << "\": ";
                 }
                 /* print choice description */
                 /* print description */
@@ -652,4 +631,20 @@ const std::string Parameters::cho_val(const std::string& param_name) const {
     else {
         throw std::string("error: unknown parameter \"--" + param_name + "\"");
     }
+}
+
+const std::string Parameters::bold(const std::string& str) {
+    #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
+        return "\e[1m" + str + "\e[0m";
+    #else
+        return str;
+    #endif
+}
+
+const std::string Parameters::underline(const std::string& str) {
+    #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
+        return "\e[4m" + str + "\e[0m";
+    #else
+        return str;
+    #endif
 }

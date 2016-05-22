@@ -135,7 +135,9 @@ class Parameters {
         Parameters(const int, char const* const* const, config, const int);
         ~Parameters();
     
-        static const int get_terminal_width();                                            // returns current's terminal width
+        static const int         get_terminal_width();                                    // returns current's terminal width
+        static const std::string bold(const std::string&);                                // returns the bold version of str
+        static const std::string underline(const std::string&);                           // returns the underlined version of str
     
         void set_program_description(const std::string&);                                 // sets program description
         void set_usage(const std::string&);                                               // sets usage
