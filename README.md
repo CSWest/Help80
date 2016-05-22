@@ -33,14 +33,15 @@ To use the classes in your own project, just include the files [*Parameters.hpp*
 #### Create the `Parameters` object
 
 When you create the `Parameters` object, you need to pass a `Parameters::config` structure to its constructor. This structure defines all the indentation and dimensions of the help menu. The structure has the following fields:
-1. `const int max_terminal_width`: the maximum width that the help menu can take. If the terminal is full screen, using 100% of its width can lead to long lines that are hard to read. This parameter should be around 90-120.
-1. `const int params_indent_len`: number of characters between the left side of the terminal and the list of parameters.
-1. `const int param_to_desc_len`: minimal number of characters between the end of a parameter's name and its description. If this space is not respected, the description begins on a new line.
-1. `const int desc_indent_len`: number of characters between the left side of the terminal and the paragraph that describes the parameters.
-1. `const int choice_indent_len`: indentation of the available choices for multiple choices parameters.
-1. `const int choice_desc_indent_len`: indentation of the choices' description from the choice's name.
-1. `const int right_margin_len`: number of characters between last character on screen and right side of the terminal.
-1. `LANG      lang`: (`lang_fr` or `lang_us`) this allows to adapt to the differences of these two languages. 
+
+  1. `const int max_terminal_width`: the maximum width that the help menu can take. If the terminal is full screen, using 100% of its width can lead to long lines that are hard to read. This parameter should be around 90-120.
+  1. `const int params_indent_len`: number of characters between the left side of the terminal and the list of parameters.
+  1. `const int param_to_desc_len`: minimal number of characters between the end of a parameter's name and its description. If this space is not respected, the description begins on a new line.
+  1. `const int desc_indent_len`: number of characters between the left side of the terminal and the paragraph that describes the parameters.
+  1. `const int choice_indent_len`: indentation of the available choices for multiple choices parameters.
+  1. `const int choice_desc_indent_len`: indentation of the choices' description from the choice's name.
+  1. `const int right_margin_len`: number of characters between last character on screen and right side of the terminal.
+  1. `LANG      lang`: (`lang_fr` or `lang_us`) this allows to adapt to the differences of these two languages. 
 
 Then two constructors are available:
 * `Parameters(const int, char const* const* const, config)`: the help menu width will be the minimum between `max_terminal_width` and the terminal's width.
