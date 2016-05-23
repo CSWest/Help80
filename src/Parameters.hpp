@@ -232,7 +232,7 @@ class Parameters {
                 ParamHolder(const std::string& p_name, const std::string& p_description, const std::string& p_type_name, const std::vector<std::string>& p_values_names={}, const bool p_display_default_value=false):
                     name(p_name),
                     description(p_description + " "),
-                    nb_values(p_values_names.size()),
+                    nb_values(static_cast<int>(p_values_names.size())),
                     values_names(p_values_names),
                     type_name(p_type_name),
                     display_default_value(p_display_default_value),
@@ -241,7 +241,7 @@ class Parameters {
             
                 const std::string              name;                                       // param name with added suffix '--'
                 const std::string              description;                                // long description paragraph, can't start or end with ' '
-                const std::size_t              nb_values;                                  // nb of values expected for the parameters
+                const int                      nb_values;                                  // nb of values expected for the parameters
                 const std::vector<std::string> values_names;                               // name of these values, without '<' and '>'
                 const std::string              type_name;                                  // to distinguish the type of the values
                 const bool                     display_default_value;                      // if default value has to be displayed in help menu
@@ -278,8 +278,8 @@ class Parameters {
 
         class UndefinedParameterException: public std::exception {
             public:
-                UndefinedParameterException(const std::string& p_param_name, const std::string& p_function, LANG lang) throw():
-                    description(lang==lang_fr
+                UndefinedParameterException(const std::string& p_param_name, const std::string& p_function, LANG p_lang) throw():
+                    description(p_lang==lang_fr
                         ? "dans " + p_function + " : paramètre \"--" + p_param_name + "\" non défini"
                         : "in function " + p_function + ": undefined parameter \"--" + p_param_name + "\"") {}
                 virtual ~UndefinedParameterException() throw() {}
@@ -290,8 +290,8 @@ class Parameters {
 
         class UnknownParameterException: public std::exception {
             public:
-                UnknownParameterException(const std::string& p_param_name, const std::string& p_function, LANG lang) throw():
-                    description(lang==lang_fr
+                UnknownParameterException(const std::string& p_param_name, const std::string& p_function, LANG p_lang) throw():
+                    description(p_lang==lang_fr
                         ? "dans " + p_function + " : paramètre \"" + p_param_name + "\" inconnu"
                         : "in function " + p_function + ": unknown parameter \"" + p_param_name + "\"") {}
                 virtual ~UnknownParameterException() throw() {}
@@ -302,8 +302,8 @@ class Parameters {
 
         class DuplicateParameterException: public std::exception {
             public:
-                DuplicateParameterException(const std::string& p_param_name, const std::string& p_function, LANG lang) throw():
-                    description(lang==lang_fr
+                DuplicateParameterException(const std::string& p_param_name, const std::string& p_function, LANG p_lang) throw():
+                    description(p_lang==lang_fr
                         ? "dans " + p_function + " : définition du paramètre \"" + p_param_name + "\" : un paramètre de même nom existe déjà"
                         : "in function " + p_function + ": definition of parameter \"" + p_param_name + "\": a parameter with the same name already exists") {}
                 virtual ~DuplicateParameterException() throw() {}
@@ -314,8 +314,8 @@ class Parameters {
 
         class UnsupportedParameterTypeException: public std::exception {
             public:
-                UnsupportedParameterTypeException(const std::string& p_type, const std::string& p_function, LANG lang) throw():
-                    description(lang==lang_fr
+                UnsupportedParameterTypeException(const std::string& p_type, const std::string& p_function, LANG p_lang) throw():
+                    description(p_lang==lang_fr
                         ? "dans " + p_function + " : type de paramètre \"" + p_type + "\" pas encore supporté"
                         : "in function " + p_function + ": type \"" + p_type + "\" not supported yet") {}
                 virtual ~UnsupportedParameterTypeException() throw() {}
@@ -326,8 +326,8 @@ class Parameters {
 
         class UndefinedValueException: public std::exception {
             public:
-                UndefinedValueException(std::string const& p_param_name, const std::size_t nb_values, const int req_value, const std::string& p_function, LANG lang) throw():
-                    description(lang==lang_fr
+                UndefinedValueException(std::string const& p_param_name, const int nb_values, const int req_value, const std::string& p_function, LANG p_lang) throw():
+                    description(p_lang==lang_fr
                         ? "dans " + p_function + " : paramètre \"" + p_param_name + "\" : " + std::to_string(nb_values) + " valeurs, tentative d'accès à " + std::to_string(req_value)
                         : "in function " + p_function + ": parameter \"" + p_param_name + "\": " + std::to_string(nb_values) + " values, tried to access " + std::to_string(req_value)) {}
                 virtual ~UndefinedValueException() throw() {}
@@ -338,8 +338,8 @@ class Parameters {
 
         class IntegerExpectedException: public std::exception {
             public:
-                IntegerExpectedException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG lang) throw():
-                    description(lang==lang_fr
+                IntegerExpectedException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG p_lang) throw():
+                    description(p_lang==lang_fr
                         ? "dans " + p_function + " : le paramètre \"" + p_param_name + "\" attend une valeur entière, et a reçu \"" + arg_value + "\""
                         : "in function " + p_function + ": parameter \"" + p_param_name + "\" expects an integer value, but received \"" + arg_value + "\"") {}
                 virtual ~IntegerExpectedException() throw() {}
@@ -350,8 +350,8 @@ class Parameters {
 
         class DecimalExpectedException: public std::exception {
             public:
-                DecimalExpectedException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG lang) throw():
-                    description(lang==lang_fr
+                DecimalExpectedException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG p_lang) throw():
+                    description(p_lang==lang_fr
                         ? "dans " + p_function + " : le paramètre \"" + p_param_name + "\" attend une valeur décimale, et a reçu \"" + arg_value + "\""
                         : "in function " + p_function + ": parameter \"" + p_param_name + "\" expects a decimal value, but received \"" + arg_value + "\"") {}
                 virtual ~DecimalExpectedException() throw() {}
@@ -362,8 +362,8 @@ class Parameters {
 
         class NotEnoughValuesException: public std::exception {
             public:
-                NotEnoughValuesException(std::string const& p_param_name, const std::size_t nb_values, const int rec_values, const std::string& p_function, LANG lang) throw():
-                    description(lang==lang_fr
+                NotEnoughValuesException(std::string const& p_param_name, const int nb_values, const int rec_values, const std::string& p_function, LANG p_lang) throw():
+                    description(p_lang==lang_fr
                         ? "dans " + p_function + " : le paramètre \"" + p_param_name + "\" attend " + std::to_string(nb_values) + " valeurs, et en a reçu " + std::to_string(rec_values)
                         : "in function " + p_function + ": parameter \"" + p_param_name + "\" expects " + std::to_string(nb_values) + " values, but received " + std::to_string(rec_values)) {}
                 virtual ~NotEnoughValuesException() throw() {}
@@ -375,10 +375,10 @@ class Parameters {
         template<typename T>
         class ValueOutOfRangeException: public std::exception {
             public:
-                ValueOutOfRangeException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG lang) throw():
+                ValueOutOfRangeException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG p_lang) throw():
                     min(nb_to_string(std::numeric_limits<T>::min())),
                     max(nb_to_string(std::numeric_limits<T>::max())),
-                    description(lang==lang_fr
+                    description(p_lang==lang_fr
                         ? "dans " + p_function + " : le paramètre \"" + p_param_name + "\" doit être compris entre " + min + " et " + max + " mais a reçu " + arg_value
                         : "in function " + p_function + ": parameter \"" + p_param_name + "\" must be between " + min + " and " + max + " but received " + arg_value) {}
                 virtual ~ValueOutOfRangeException() throw() {}
@@ -392,8 +392,8 @@ class Parameters {
 
         class UnknownChoiceException: public std::exception {
             public:
-                UnknownChoiceException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG lang) throw():
-                    description(lang==lang_fr
+                UnknownChoiceException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG p_lang) throw():
+                    description(p_lang==lang_fr
                         ? "dans " + p_function + " : le choix \"" + arg_value + "\" pour le paramètre \"" + p_param_name + "\" n'est pas disponible"
                         : "in function " + p_function + ": choice \"" + arg_value + "\" for parameter \"" + p_param_name + "\" is not available") {}
                 virtual ~UnknownChoiceException() throw() {}
@@ -436,9 +436,9 @@ void Parameters::pr_def(ParamHolder* const p, const bool add_quotes) const {
         const Param<T>* const p_reint = dynamic_cast<Param<T>* const>(p);
         if(lang==lang_fr) std::cout << desc_indent << bold("Défaut :");
         else              std::cout << desc_indent << bold("Default:");
-        for(std::size_t j=0 ; j<p->nb_values ; j++) {
-            if(!add_quotes) { std::cout << " "   << p_reint->def_values[j];         if(j<p->nb_values-1) std::cout << ","; }
-            else            { std::cout << " \"" << p_reint->def_values[j] << "\""; if(j<p->nb_values-1) std::cout << ","; }
+        for(int j=0 ; j<p->nb_values ; j++) {
+            if(!add_quotes) { std::cout << " "   << p_reint->def_values[static_cast<std::size_t>(j)];         if(j<p->nb_values-1) std::cout << ","; }
+            else            { std::cout << " \"" << p_reint->def_values[static_cast<std::size_t>(j)] << "\""; if(j<p->nb_values-1) std::cout << ","; }
         }
         std::cout << std::endl;
     }
@@ -464,7 +464,7 @@ const T Parameters::num_val(const std::string& param_name, const int value_numbe
                 /* reinterpret with the good type */
                 Param<T>* const p_reint = dynamic_cast<Param<T>* const>(p);
                 /* return value */
-                return p_reint->values[value_number-1];
+                return p_reint->values[static_cast<std::size_t>(value_number-1)];
             }
         }
     }

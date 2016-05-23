@@ -177,11 +177,11 @@ void Parameters::print_description() const {
     bool        first_word = true;
     for(std::size_t j=0 ; j<description.length() ; j++) {
         char c = description.at(j);
-        if(c!=' ' && c!= '\n' && params_indent_len+word.length()<terminal_width-right_margin_len) {
+        if(c!=' ' && c!= '\n' && params_indent_len+static_cast<int>(word.length())<terminal_width-right_margin_len) {
             word += c;
         }
         else {
-            if(params_indent_len+line.length()+word.length()+1<=terminal_width-right_margin_len) {
+            if(params_indent_len+static_cast<int>(line.length())+static_cast<int>(word.length())+1<=terminal_width-right_margin_len) {
                 if(c!='\n') {
                     if(first_word) { line = word; first_word = false; }
                     else           { line += " " + word; }
@@ -198,7 +198,7 @@ void Parameters::print_description() const {
             }
             else {
                 /* line would be too long, print it */
-                if(params_indent_len+word.length()<terminal_width-right_margin_len) {
+                if(params_indent_len+static_cast<int>(word.length())<terminal_width-right_margin_len) {
                     /* prints line and take a new line */
                     std::cout << params_indent << line << std::endl;
                     line = word;
@@ -206,11 +206,11 @@ void Parameters::print_description() const {
                 }
                 else {
                     /* no need to take another line, the word will be split anyways */
-                    std::size_t line_len;
-                    if(line!="") { std::cout << params_indent << line << " "; line_len = line.length() + 1; }
+                    int line_len;
+                    if(line!="") { std::cout << params_indent << line << " "; line_len = static_cast<int>(line.length()) + 1; }
                     else         { line_len = 0; }
-                    std::cout << word.substr(0, terminal_width-right_margin_len-(params_indent_len+line_len)) << std::endl;
-                    word = word.substr(terminal_width-right_margin_len-(params_indent_len+line_len));
+                    std::cout << word.substr(0, static_cast<std::size_t>(terminal_width-right_margin_len-(params_indent_len+line_len))) << std::endl;
+                    word = word.substr(static_cast<std::size_t>(terminal_width-right_margin_len-(params_indent_len+line_len)));
                     word.push_back(c);
                     line       = "";
                     first_word = true;
@@ -247,12 +247,12 @@ void Parameters::print_parameters() const {
         for(std::string value_name: p->values_names) use += " <" + underline(value_name) + ">";
         
         /* print param and values to take */
-        bool        desc_on_new_line = false;
-        std::size_t len_adjust       = 0;
+        bool desc_on_new_line = false;
+        int  len_adjust       = 0;
         #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
             len_adjust = 8 + p->nb_values*8;
         #endif
-        if(use.length()-len_adjust+param_to_desc_len>desc_indent_len) {
+        if(static_cast<int>(use.length())-len_adjust+param_to_desc_len>desc_indent_len) {
             /* print param list now if too long */
             std::cout << use << std::endl;
             desc_on_new_line = true;
@@ -261,7 +261,7 @@ void Parameters::print_parameters() const {
             /* print list and spaces if it fits */
             /* minus one because one space will be added by first description line */
             std::string spaces = "";
-            for(int j=0 ; j<desc_indent_len-use.length()+len_adjust ; j++) spaces += " ";
+            for(int j=0 ; j<desc_indent_len-static_cast<int>(use.length())+len_adjust ; j++) spaces += " ";
             std::cout << use << spaces;
         }
         
@@ -272,11 +272,11 @@ void Parameters::print_parameters() const {
         bool        first_word = true;
         for(std::size_t j=0 ; j<p->description.length() ; j++) {
             char c = p->description.at(j);
-            if(c!=' ' && desc_indent_len+word.length()<terminal_width-right_margin_len) {
+            if(c!=' ' && desc_indent_len+static_cast<int>(word.length())<terminal_width-right_margin_len) {
                 word += c;
             }
             else {
-                if(desc_indent_len+line.length()+word.length()+1<=terminal_width-right_margin_len) {
+                if(desc_indent_len+static_cast<int>(line.length()+word.length())+1<=terminal_width-right_margin_len) {
                     if(first_word) { line = word; first_word = false; }
                     else           { line += " " + word; }
                     word = "";
@@ -285,7 +285,7 @@ void Parameters::print_parameters() const {
                     /* line would be too long, print it */
                     if(!first_l || desc_on_new_line) std::cout << desc_indent;
                     if(first_l)                      first_l = false;
-                    if(desc_indent_len+word.length()<terminal_width-right_margin_len) {
+                    if(desc_indent_len+static_cast<int>(word.length())<terminal_width-right_margin_len) {
                         /* prints line and take a new line */
                         std::cout << line << std::endl;
                         line = word;
@@ -293,11 +293,12 @@ void Parameters::print_parameters() const {
                     }
                     else {
                         /* no need to take another line, the word will be split anyways */
-                        std::size_t line_len;
-                        if(line!="") { std::cout << line << " "; line_len = line.length() + 1; }
+                        int line_len;
+                        if(line!="") { std::cout << line << " "; line_len = static_cast<int>(line.length() + 1); }
                         else         { line_len = 0; }
-                        std::cout << word.substr(0, terminal_width-right_margin_len-(desc_indent_len+line_len)) << std::endl;
-                        word = word.substr(terminal_width-right_margin_len-(desc_indent_len+line_len));
+                        int ind = terminal_width-(right_margin_len+desc_indent_len+line_len);
+                        std::cout << word.substr(0, static_cast<std::size_t>(ind)) << std::endl;
+                        word = word.substr(static_cast<std::size_t>(ind));
                         word.push_back(c);
                         line       = "";
                         first_word = true;
@@ -311,23 +312,23 @@ void Parameters::print_parameters() const {
         
         /* print choices */
         if(choices_params.count(p->name)) {
-            for(const std::pair<std::string, std::string>& p: choices.at(p->name)) {
+            for(const std::pair<std::string, std::string>& pc: choices.at(p->name)) {
                 /* print choice and new line */
-                if(lang==lang_fr) std::cout << desc_indent << choice_indent << "\"" << bold(p.first) << "\" :" << std::endl;
-                else              std::cout << desc_indent << choice_indent << "\"" << bold(p.first) << "\":" << std::endl;
+                if(lang==lang_fr) std::cout << desc_indent << choice_indent << "\"" << bold(pc.first) << "\" :" << std::endl;
+                else              std::cout << desc_indent << choice_indent << "\"" << bold(pc.first) << "\":" << std::endl;
                 /* print choice description */
                 /* print description */
-                std::string spaces     = desc_indent + choice_indent + choice_desc_indent;
-                std::string line       = "";
-                std::string word       = "";
-                bool        first_word = true;
-                for(std::size_t j=0 ; j<p.second.length() ; j++) {
-                    char c = p.second.at(j);
-                    if(c!=' ' && desc_indent_len+choice_indent_len+choice_desc_indent_len+word.length()<terminal_width-right_margin_len) {
+                std::string spaces      = desc_indent + choice_indent + choice_desc_indent;
+                line       = "";
+                word       = "";
+                first_word = true;
+                for(std::size_t j=0 ; j<pc.second.length() ; j++) {
+                    char c = pc.second.at(j);
+                    if(c!=' ' && desc_indent_len+choice_indent_len+choice_desc_indent_len+static_cast<int>(word.length())<terminal_width-right_margin_len) {
                         word += c;
                     }
                     else {
-                        if(desc_indent_len+choice_indent_len+choice_desc_indent_len+line.length()+word.length()+1<=terminal_width-right_margin_len) {
+                        if(desc_indent_len+choice_indent_len+choice_desc_indent_len+static_cast<int>(line.length()+word.length())+1<=terminal_width-right_margin_len) {
                             if(first_word) { line = word; first_word = false; }
                             else           { line += " " + word; }
                             word = "";
@@ -335,7 +336,7 @@ void Parameters::print_parameters() const {
                         else {
                             /* line would be too long, print it */
                             std::cout << spaces;
-                            if(desc_indent_len+choice_indent_len+choice_desc_indent_len+word.length()<terminal_width-right_margin_len) {
+                            if(desc_indent_len+choice_indent_len+choice_desc_indent_len+static_cast<int>(word.length())<terminal_width-right_margin_len) {
                                 /* prints line and take a new line */
                                 std::cout << line << std::endl;
                                 line = word;
@@ -343,11 +344,11 @@ void Parameters::print_parameters() const {
                             }
                             else {
                                 /* no need to take another line, the word will be split anyways */
-                                std::size_t line_len;
-                                if(line!="") { std::cout << line << " "; line_len = line.length() + 1; }
+                                int line_len;
+                                if(line!="") { std::cout << line << " "; line_len = static_cast<int>(line.length()) + 1; }
                                 else         { line_len = 0; }
-                                std::cout << word.substr(0, terminal_width-right_margin_len-(desc_indent_len+choice_indent_len+choice_desc_indent_len+line_len)) << std::endl;
-                                word = word.substr(terminal_width-right_margin_len-(desc_indent_len+choice_indent_len+choice_desc_indent_len+line_len));
+                                std::cout << word.substr(0, static_cast<std::size_t>(terminal_width-right_margin_len-(desc_indent_len+choice_indent_len+choice_desc_indent_len+line_len))) << std::endl;
+                                word = word.substr(static_cast<std::size_t>(terminal_width-right_margin_len-(desc_indent_len+choice_indent_len+choice_desc_indent_len+line_len)));
                                 word.push_back(c);
                                 line       = "";
                                 first_word = true;
@@ -391,7 +392,7 @@ void Parameters::parse_params() {
             /* retrieve param */
             ParamHolder* const p = params[line_param];
             /* read param values */
-            for(int j=0 ; j<p->nb_values ; j++) {
+            for(std::size_t j=0 ; j<static_cast<std::size_t>(p->nb_values) ; j++) {
                 if(++i<argc) {
                     std::string arg_value(argv[i]);
                     if(p->type_name==typeid(short int).name()) {
@@ -497,7 +498,7 @@ void Parameters::parse_params() {
                     }
                 }
                 else {
-                    throw NotEnoughValuesException(p->name, p->nb_values, j, "Parameters::parse_params", lang);
+                    throw NotEnoughValuesException(p->name, p->nb_values, static_cast<int>(j), "Parameters::parse_params", lang);
                 }
             }
             /* arg is defined */
@@ -529,7 +530,7 @@ const std::string Parameters::str_val(const std::string& param_name, const int v
             /* reinterpret with the good type */
             Param<std::string>* const p_reint = dynamic_cast<Param<std::string>* const>(p);
             /* return value */
-            return p_reint->values[value_number-1];
+            return p_reint->values[static_cast<std::size_t>(value_number-1)];
         }
     }
     else {
