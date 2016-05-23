@@ -12,6 +12,7 @@ The classes defined in this project can be used for parameters parsing and displ
 * make sure all the input arguments respect the size of the built-in type you assign them to 
 
 Supported types:
+
 `std::string` `short int` `unsigned short int` `int` `unsigned int` `long int` `unsigned long int` `long long int` `unsigned long long int` `float` `double` `long double`
 
 Note:
