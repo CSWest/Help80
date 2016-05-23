@@ -422,11 +422,12 @@ void Parameters::define_num_str_param(const std::string& param_name, const std::
 
 template<typename T>
 void Parameters::pr_def(ParamHolder* const p, const bool add_quotes) const {
-    if(typeid(T).name()!=typeid(int                   ).name() && typeid(T).name()!=typeid(long int         ).name()
-    && typeid(T).name()!=typeid(long long int         ).name() && typeid(T).name()!=typeid(unsigned long int).name()
-    && typeid(T).name()!=typeid(unsigned long long int).name() && typeid(T).name()!=typeid(float            ).name()
-    && typeid(T).name()!=typeid(double                ).name() && typeid(T).name()!=typeid(long double      ).name()
-    && typeid(T).name()!=typeid(std::string           ).name()) {
+    if(typeid(T).name()!=typeid(short int    ).name() && typeid(T).name()!=typeid(unsigned short int    ).name()
+    && typeid(T).name()!=typeid(int          ).name() && typeid(T).name()!=typeid(unsigned int          ).name()
+    && typeid(T).name()!=typeid(long int     ).name() && typeid(T).name()!=typeid(unsigned long int     ).name()
+    && typeid(T).name()!=typeid(long long int).name() && typeid(T).name()!=typeid(unsigned long long int).name()
+    && typeid(T).name()!=typeid(float        ).name() && typeid(T).name()!=typeid(std::string           ).name()
+    && typeid(T).name()!=typeid(double       ).name() && typeid(T).name()!=typeid(long double           ).name()) {
         throw UnsupportedParameterTypeException(typeid(T).name(), "Parameters::num_val", lang);
     }
     else {
@@ -449,10 +450,12 @@ const T Parameters::num_val(const std::string& param_name, const int value_numbe
             throw UndefinedValueException(param_name, p->nb_values, value_number, "Parameters::str_val", lang);
         }
         else {
-            if(typeid(T).name()!=typeid(int                   ).name() && typeid(T).name()!=typeid(long int         ).name()
-            && typeid(T).name()!=typeid(long long int         ).name() && typeid(T).name()!=typeid(unsigned long int).name()
-            && typeid(T).name()!=typeid(unsigned long long int).name() && typeid(T).name()!=typeid(float            ).name()
-            && typeid(T).name()!=typeid(double                ).name() && typeid(T).name()!=typeid(long double      ).name()) {
+            if(typeid(T).name()!=typeid(short int    ).name() && typeid(T).name()!=typeid(unsigned short int    ).name()
+            && typeid(T).name()!=typeid(int          ).name() && typeid(T).name()!=typeid(unsigned int          ).name()
+            && typeid(T).name()!=typeid(long int     ).name() && typeid(T).name()!=typeid(unsigned long int     ).name()
+            && typeid(T).name()!=typeid(long long int).name() && typeid(T).name()!=typeid(unsigned long long int).name()
+            && typeid(T).name()!=typeid(float        ).name()
+            && typeid(T).name()!=typeid(double       ).name() && typeid(T).name()!=typeid(long double           ).name()) {
                 throw UnsupportedParameterTypeException(typeid(T).name(), "Parameters::num_val", lang);
             }
             else {

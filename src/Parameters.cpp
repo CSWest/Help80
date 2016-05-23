@@ -362,10 +362,13 @@ void Parameters::print_parameters() const {
         
         /* print default value */
         if(p->display_default_value) {
-            if(p->type_name==typeid(int).name())                         pr_def<int>(p);
+            if(p->type_name==typeid(short int).name())                   pr_def<short int>(p);
+            else if(p->type_name==typeid(unsigned short int).name())     pr_def<unsigned short int>(p);
+            else if(p->type_name==typeid(int).name())                    pr_def<int>(p);
+            else if(p->type_name==typeid(unsigned int).name())           pr_def<unsigned int>(p);
             else if(p->type_name==typeid(long int).name())               pr_def<long int>(p);
-            else if(p->type_name==typeid(long long int).name())          pr_def<long long int>(p);
             else if(p->type_name==typeid(unsigned long int).name())      pr_def<unsigned long int>(p);
+            else if(p->type_name==typeid(long long int).name())          pr_def<long long int>(p);
             else if(p->type_name==typeid(unsigned long long int).name()) pr_def<unsigned long long int>(p);
             else if(p->type_name==typeid(float).name())                  pr_def<float>(p);
             else if(p->type_name==typeid(double).name())                 pr_def<double>(p);
@@ -391,11 +394,47 @@ void Parameters::parse_params() {
             for(int j=0 ; j<p->nb_values ; j++) {
                 if(++i<argc) {
                     std::string arg_value(argv[i]);
-                    if(p->type_name==typeid(int).name()) {
+                    if(p->type_name==typeid(short int).name()) {
+                        Param<short int>* const p_reint = dynamic_cast<Param<short int>* const>(p);
+                        int                     tmp_val = 0;
+                        try { tmp_val = std::stoi(arg_value); }
+                        catch(const std::invalid_argument& e) { throw IntegerExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
+                        catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<short int>(line_param, arg_value, "Parameters::parse_params", lang); }
+                        /* arg_value is a valid unsigned long int, but is it a valid unsigned int */
+                        short int min = std::numeric_limits<short int>::min();
+                        short int max = std::numeric_limits<short int>::max();
+                        if(tmp_val<static_cast<int>(min) || tmp_val>static_cast<int>(max)) { throw ValueOutOfRangeException<short int>(line_param, arg_value, "Parameters::parse_params", lang); }
+                        else { p_reint->values[j] = static_cast<short int>(tmp_val); }
+                    }
+                    else if(p->type_name==typeid(unsigned short int).name()) {
+                        Param<unsigned short int>* const p_reint = dynamic_cast<Param<unsigned short int>* const>(p);
+                        unsigned long int                tmp_val = 0;
+                        try { tmp_val = std::stoul(arg_value); }
+                        catch(const std::invalid_argument& e) { throw IntegerExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
+                        catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<unsigned short int>(line_param, arg_value, "Parameters::parse_params", lang); }
+                        /* arg_value is a valid unsigned long int, but is it a valid unsigned int */
+                        unsigned short int min = std::numeric_limits<unsigned short int>::min();
+                        unsigned short int max = std::numeric_limits<unsigned short int>::max();
+                        if(tmp_val<static_cast<unsigned long int>(min) || tmp_val>static_cast<unsigned long int>(max)) { throw ValueOutOfRangeException<unsigned short int>(line_param, arg_value, "Parameters::parse_params", lang); }
+                        else { p_reint->values[j] = static_cast<unsigned short int>(tmp_val); }
+                    }
+                    else if(p->type_name==typeid(int).name()) {
                         Param<int>* const p_reint = dynamic_cast<Param<int>* const>(p);
                         try { p_reint->values[j] = std::stoi(arg_value); }
                         catch(const std::invalid_argument& e) { throw IntegerExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
                         catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<int>(line_param, arg_value, "Parameters::parse_params", lang); }
+                    }
+                    else if(p->type_name==typeid(unsigned int).name()) {
+                        Param<unsigned int>* const p_reint = dynamic_cast<Param<unsigned int>* const>(p);
+                        unsigned long int          tmp_val = 0;
+                        try { tmp_val = std::stoul(arg_value); }
+                        catch(const std::invalid_argument& e) { throw IntegerExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
+                        catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<unsigned int>(line_param, arg_value, "Parameters::parse_params", lang); }
+                        /* arg_value is a valid unsigned long int, but is it a valid unsigned int */
+                        unsigned int min = std::numeric_limits<unsigned int>::min();
+                        unsigned int max = std::numeric_limits<unsigned int>::max();
+                        if(tmp_val<static_cast<unsigned long int>(min) || tmp_val>static_cast<unsigned long int>(max)) { throw ValueOutOfRangeException<unsigned int>(line_param, arg_value, "Parameters::parse_params", lang); }
+                        else { p_reint->values[j] = static_cast<unsigned int>(tmp_val); }
                     }
                     else if(p->type_name==typeid(long int).name()) {
                         Param<long int>* const p_reint = dynamic_cast<Param<long int>* const>(p);
@@ -403,17 +442,17 @@ void Parameters::parse_params() {
                         catch(const std::invalid_argument& e) { throw IntegerExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
                         catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<long int>(line_param, arg_value, "Parameters::parse_params", lang); }
                     }
-                    else if(p->type_name==typeid(long long int).name()) {
-                        Param<long long int>* const p_reint = dynamic_cast<Param<long long int>* const>(p);
-                        try { p_reint->values[j] = std::stoll(arg_value); }
-                        catch(const std::invalid_argument& e) { throw IntegerExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
-                        catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<long long int>(line_param, arg_value, "Parameters::parse_params", lang); }
-                    }
                     else if(p->type_name==typeid(unsigned long int).name()) {
                         Param<unsigned long int>* const p_reint = dynamic_cast<Param<unsigned long int>* const>(p);
                         try { p_reint->values[j] = std::stoul(arg_value); }
                         catch(const std::invalid_argument& e) { throw IntegerExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
                         catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<unsigned long int>(line_param, arg_value, "Parameters::parse_params", lang); }
+                    }
+                    else if(p->type_name==typeid(long long int).name()) {
+                        Param<long long int>* const p_reint = dynamic_cast<Param<long long int>* const>(p);
+                        try { p_reint->values[j] = std::stoll(arg_value); }
+                        catch(const std::invalid_argument& e) { throw IntegerExpectedException(line_param, arg_value, "Parameters::parse_params", lang); }
+                        catch(const std::out_of_range& e)     { throw ValueOutOfRangeException<long long int>(line_param, arg_value, "Parameters::parse_params", lang); }
                     }
                     else if(p->type_name==typeid(unsigned long long int).name()) {
                         Param<unsigned long long int>* const p_reint = dynamic_cast<Param<unsigned long long int>* const>(p);
