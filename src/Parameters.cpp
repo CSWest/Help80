@@ -177,28 +177,37 @@ void Parameters::print_description() const {
     bool        first_word = true;
     for(std::size_t j=0 ; j<description.length() ; j++) {
         char c = description.at(j);
-        if(c!=' ' && params_indent_len+word.length()<terminal_width-right_margin_len) {
+        if(c!=' ' && c!= '\n' && params_indent_len+word.length()<terminal_width-right_margin_len) {
             word += c;
         }
         else {
             if(params_indent_len+line.length()+word.length()+1<=terminal_width-right_margin_len) {
-                if(first_word) { line = word; first_word = false; }
-                else           { line += " " + word; }
-                word = "";
+                if(c!='\n') {
+                    if(first_word) { line = word; first_word = false; }
+                    else           { line += " " + word; }
+                    word = "";
+                }
+                else {
+                    if(first_word) { line = word; first_word = false; }
+                    else           { line += " " + word; }
+                    std::cout << params_indent << line << std::endl;
+                    first_word = true;
+                    line       = "";
+                    word       = "";
+                }
             }
             else {
                 /* line would be too long, print it */
-                std::cout << params_indent;
                 if(params_indent_len+word.length()<terminal_width-right_margin_len) {
                     /* prints line and take a new line */
-                    std::cout << line << std::endl;
+                    std::cout << params_indent << line << std::endl;
                     line = word;
                     word = "";
                 }
                 else {
                     /* no need to take another line, the word will be split anyways */
                     std::size_t line_len;
-                    if(line!="") { std::cout << line << " "; line_len = line.length() + 1; }
+                    if(line!="") { std::cout << params_indent << line << " "; line_len = line.length() + 1; }
                     else         { line_len = 0; }
                     std::cout << word.substr(0, terminal_width-right_margin_len-(params_indent_len+line_len)) << std::endl;
                     word = word.substr(terminal_width-right_margin_len-(params_indent_len+line_len));
