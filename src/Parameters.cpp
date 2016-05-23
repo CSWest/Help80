@@ -299,6 +299,7 @@ void Parameters::print_parameters() const {
                         if(line!="") { std::cout << line << " "; line_len = static_cast<int>(line.length() + 1); }
                         else         { line_len = 0; }
                         int ind = terminal_width-(right_margin_len+desc_indent_len+line_len);
+                        if(ind<0) ind=0;
                         std::cout << word.substr(0, static_cast<std::size_t>(ind)) << std::endl;
                         word = word.substr(static_cast<std::size_t>(ind));
                         word.push_back(c);
@@ -349,8 +350,10 @@ void Parameters::print_parameters() const {
                                 int line_len;
                                 if(line!="") { std::cout << line << " "; line_len = static_cast<int>(line.length()) + 1; }
                                 else         { line_len = 0; }
-                                std::cout << word.substr(0, static_cast<std::size_t>(terminal_width-right_margin_len-(desc_indent_len+choice_indent_len+choice_desc_indent_len+line_len))) << std::endl;
-                                word = word.substr(static_cast<std::size_t>(terminal_width-right_margin_len-(desc_indent_len+choice_indent_len+choice_desc_indent_len+line_len)));
+                                int ind = terminal_width-(right_margin_len+desc_indent_len+choice_indent_len+choice_desc_indent_len+line_len);
+                                if(ind<0) ind=0;
+                                std::cout << word.substr(0, static_cast<std::size_t>(ind)) << std::endl;
+                                word = word.substr(static_cast<std::size_t>(ind));
                                 word.push_back(c);
                                 line       = "";
                                 first_word = true;
