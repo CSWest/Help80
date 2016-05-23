@@ -326,12 +326,24 @@ class Parameters {
                 const std::string description;
         };
 
+        class DynamicCastFailedException: public std::exception {
+            public:
+                DynamicCastFailedException(const std::string& p_param_name, const std::string& p_function, LANG p_lang) throw():
+                    description(p_lang==lang_fr
+                        ? "dans " + p_function + " : le reinterpret_cast sur le paramètre \"" + p_param_name + "\" a échoué, vérifiez que l'argument de template correspond bien au type du paramètre"
+                        : "in function " + p_function + ": reinterpret_cast on parameter \"" + p_param_name + "\" failed, check that template argument matches the parameter's type") {}
+                virtual ~DynamicCastFailedException() throw() {}
+                virtual const char* what()            const throw() { return description.c_str(); }
+            private:
+                const std::string description;
+        };
+
         class UndefinedValueException: public std::exception {
             public:
                 UndefinedValueException(std::string const& p_param_name, const int nb_values, const int req_value, const std::string& p_function, LANG p_lang) throw():
                     description(p_lang==lang_fr
-                        ? "dans " + p_function + " : paramètre \"" + p_param_name + "\" : " + std::to_string(nb_values) + " valeurs, tentative d'accès à " + std::to_string(req_value)
-                        : "in function " + p_function + ": parameter \"" + p_param_name + "\": " + std::to_string(nb_values) + " values, tried to access " + std::to_string(req_value)) {}
+                        ? "dans " + p_function + " : le paramètre \"" + p_param_name + "\" a " + std::to_string(nb_values) + " valeurs, tentative d'accès à " + std::to_string(req_value)
+                        : "in function " + p_function + ": parameter \"" + p_param_name + "\" has " + std::to_string(nb_values) + " values, tried to access " + std::to_string(req_value)) {}
                 virtual ~UndefinedValueException() throw() {}
                 virtual const char* what()    const throw() { return description.c_str(); }
             private:
@@ -436,6 +448,9 @@ void Parameters::pr_def(ParamHolder* const p, const bool add_quotes) const {
     }
     else {
         const Param<T>* const p_reint = dynamic_cast<Param<T>* const>(p);
+        if(p_reint==0) {
+            throw DynamicCastFailedException(p->name, "Parameters::pr_def", lang);
+        }
         if(lang==lang_fr) std::cout << desc_indent << bold("Défaut :");
         else              std::cout << desc_indent << bold("Default:");
         for(int j=0 ; j<p->nb_values ; j++) {
@@ -465,6 +480,9 @@ const T Parameters::num_val(const std::string& param_name, const int value_numbe
             else {
                 /* reinterpret with the good type */
                 Param<T>* const p_reint = dynamic_cast<Param<T>* const>(p);
+                if(p_reint==0) {
+                    throw DynamicCastFailedException(param_name, "Parameters::num_val", lang);
+                }
                 /* return value */
                 return p_reint->values[static_cast<std::size_t>(value_number-1)];
             }

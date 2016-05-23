@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
     try {
         p.insert_subsection("FIRST SUBSECTION");
         p.define_param("help", "Displays this help.");
-        p.define_num_str_param<int>("int_parameter", {"value"}, {80}, "This parameter would allow the user to set the value for parameter. The default value, 80, is automatically printed under this short description since the function is called with optional parameter 'display_default_value' set to true. This description, although longer than 80 characters, keeps a nice appearence in the help menu.", true);
+        p.define_num_str_param<unsigned int>("int_parameter", {"value"}, {80}, "This parameter would allow the user to set the value for parameter. The default value, 80, is automatically printed under this short description since the function is called with optional parameter 'display_default_value' set to true. This description, although longer than 80 characters, keeps a nice appearence in the help menu.", true);
         p.define_num_str_param<double>("multiple_value", {"v1", "v2", "v3"}, {0.5, 0.7, 10}, "This parameter expects three values. Since the parameter's name and the list of values is a long string, this description paragraph is printed on a new line. Default values are defined but aren't listed below.");
         p.define_choice_param("multiple_choice", "choice", "second_mode",
                                  {{"first_mode", "This mode is the first available mode. The description of the choices also fits in the terminal."},
@@ -83,14 +83,14 @@ int main(int argc, char** argv) {
     /* print help and stop if help is required */
     if(p.is_spec("help") || argc==1) {
         p.print_help();
-        return 0;
+        //return 0;
     }
     
     /* retrieve values */
     try {
         std::cout << "FIRST SUBSECTION:" << std::endl;
         std::cout << "   help:             " << p.is_spec("help") << std::endl;
-        std::cout << "   int_parameter:    " << p.num_val<int>("int_parameter") << std::endl;
+        std::cout << "   int_parameter:    " << p.num_val<unsigned int>("int_parameter") << std::endl;
         std::cout << "   multiple_value:   " << p.num_val<double>("multiple_value", 1) << ", "
                                              << p.num_val<double>("multiple_value", 2) << ", "
                                              << p.num_val<double>("multiple_value", 3) << std::endl;
