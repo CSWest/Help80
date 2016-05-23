@@ -279,8 +279,8 @@ class Parameters {
             public:
                 UndefinedParameterException(const std::string& p_param_name, const std::string& p_function, LANG lang) throw():
                     description(lang==lang_fr
-                        ? "paramètre \"--" + p_param_name + "\" non défini dans la fonction \"" + p_function + "\""
-                        : "undefined parameter \"--" + p_param_name + "\" in function \"" + p_function + "\"") {}
+                        ? "dans " + p_function + " : paramètre \"--" + p_param_name + "\" non défini"
+                        : "in function " + p_function + ": undefined parameter \"--" + p_param_name + "\"") {}
                 virtual ~UndefinedParameterException() throw() {}
                 virtual const char* what()       const throw() { return description.c_str(); }
             private:
@@ -291,8 +291,8 @@ class Parameters {
             public:
                 UnknownParameterException(const std::string& p_param_name, const std::string& p_function, LANG lang) throw():
                     description(lang==lang_fr
-                        ? "paramètre \"" + p_param_name + "\" inconnu dans la fonction \"" + p_function + "\""
-                        : "unknown parameter \"" + p_param_name + "\" in function \"" + p_function + "\"") {}
+                        ? "dans " + p_function + " : paramètre \"" + p_param_name + "\" inconnu"
+                        : "in function " + p_function + ": unknown parameter \"" + p_param_name + "\"") {}
                 virtual ~UnknownParameterException() throw() {}
                 virtual const char* what()       const throw() { return description.c_str(); }
             private:
@@ -303,8 +303,8 @@ class Parameters {
             public:
                 DuplicateParameterException(const std::string& p_param_name, const std::string& p_function, LANG lang) throw():
                     description(lang==lang_fr
-                        ? "définition du paramètre \"" + p_param_name + "\" dans la fonction \"" + p_function + "\" : un paramètre de même nom existe déjà"
-                        : "definition of parameter \"" + p_param_name + "\" in function \"" + p_function + "\": a parameter with the same name already exists") {}
+                        ? "dans " + p_function + " : définition du paramètre \"" + p_param_name + "\" : un paramètre de même nom existe déjà"
+                        : "in function " + p_function + ": definition of parameter \"" + p_param_name + "\": a parameter with the same name already exists") {}
                 virtual ~DuplicateParameterException() throw() {}
                 virtual const char* what()       const throw() { return description.c_str(); }
             private:
@@ -315,8 +315,8 @@ class Parameters {
             public:
                 UnsupportedParameterTypeException(const std::string& p_type, const std::string& p_function, LANG lang) throw():
                     description(lang==lang_fr
-                        ? "type de paramètre \"" + p_type + "\" pas encore supporté dans la fonction \"" + p_function + "\""
-                        : "type \"" + p_type + "\" not supported yet in function \"" + p_function + "\"") {}
+                        ? "dans " + p_function + " : type de paramètre \"" + p_type + "\" pas encore supporté"
+                        : "in function " + p_function + ": type \"" + p_type + "\" not supported yet") {}
                 virtual ~UnsupportedParameterTypeException() throw() {}
                 virtual const char* what()             const throw() { return description.c_str(); }
             private:
@@ -327,8 +327,8 @@ class Parameters {
             public:
                 UndefinedValueException(std::string const& p_param_name, const std::size_t nb_values, const int req_value, const std::string& p_function, LANG lang) throw():
                     description(lang==lang_fr
-                        ? "paramètre \"" + p_param_name + "\" : " + std::to_string(nb_values) + " valeurs, tentative d'accès à " + std::to_string(req_value) + " dans la fonction \"" + p_function + "\""
-                        : "parameter \"" + p_param_name + "\": " + std::to_string(nb_values) + " values, tried to access " + std::to_string(req_value) + " in function \"" + p_function + "\"") {}
+                        ? "dans " + p_function + " : paramètre \"" + p_param_name + "\" : " + std::to_string(nb_values) + " valeurs, tentative d'accès à " + std::to_string(req_value)
+                        : "in function " + p_function + ": parameter \"" + p_param_name + "\": " + std::to_string(nb_values) + " values, tried to access " + std::to_string(req_value)) {}
                 virtual ~UndefinedValueException() throw() {}
                 virtual const char* what()    const throw() { return description.c_str(); }
             private:
@@ -339,8 +339,8 @@ class Parameters {
             public:
                 IntegerExpectedException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG lang) throw():
                     description(lang==lang_fr
-                        ? "le paramètre \"" + p_param_name + "\" attend une valeur entière, et a reçu \"" + arg_value + "\" dans la fonction \"" + p_function + "\""
-                        : "parameter \"" + p_param_name + "\" expects an integer value, but received \"" + arg_value + "\" in function \"" + p_function + "\"") {}
+                        ? "dans " + p_function + " : le paramètre \"" + p_param_name + "\" attend une valeur entière, et a reçu \"" + arg_value + "\""
+                        : "in function " + p_function + ": parameter \"" + p_param_name + "\" expects an integer value, but received \"" + arg_value + "\"") {}
                 virtual ~IntegerExpectedException() throw() {}
                 virtual const char* what()    const throw() { return description.c_str(); }
             private:
@@ -351,8 +351,8 @@ class Parameters {
             public:
                 DecimalExpectedException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG lang) throw():
                     description(lang==lang_fr
-                        ? "le paramètre \"" + p_param_name + "\" attend une valeur décimale, et a reçu \"" + arg_value + "\" dans la fonction \"" + p_function + "\""
-                        : "parameter \"" + p_param_name + "\" expects a decimal value, but received \"" + arg_value + "\" in function \"" + p_function + "\"") {}
+                        ? "dans " + p_function + " : le paramètre \"" + p_param_name + "\" attend une valeur décimale, et a reçu \"" + arg_value + "\""
+                        : "in function " + p_function + ": parameter \"" + p_param_name + "\" expects a decimal value, but received \"" + arg_value + "\"") {}
                 virtual ~DecimalExpectedException() throw() {}
                 virtual const char* what()    const throw() { return description.c_str(); }
             private:
@@ -363,8 +363,8 @@ class Parameters {
             public:
                 NotEnoughValuesException(std::string const& p_param_name, const std::size_t nb_values, const int rec_values, const std::string& p_function, LANG lang) throw():
                     description(lang==lang_fr
-                        ? "le paramètre \"" + p_param_name + "\" attend " + std::to_string(nb_values) + " valeurs, et en a reçu " + std::to_string(rec_values) + " dans la fonction \"" + p_function + "\""
-                        : "parameter \"" + p_param_name + "\" expects " + std::to_string(nb_values) + " values, but received " + std::to_string(rec_values) + " in function \"" + p_function + "\"") {}
+                        ? "dans " + p_function + " : le paramètre \"" + p_param_name + "\" attend " + std::to_string(nb_values) + " valeurs, et en a reçu " + std::to_string(rec_values)
+                        : "in function " + p_function + ": parameter \"" + p_param_name + "\" expects " + std::to_string(nb_values) + " values, but received " + std::to_string(rec_values)) {}
                 virtual ~NotEnoughValuesException() throw() {}
                 virtual const char* what()    const throw() { return description.c_str(); }
             private:
@@ -378,8 +378,8 @@ class Parameters {
                     min(std::numeric_limits<T>::min()),
                     max(std::numeric_limits<T>::max()),
                     description(lang==lang_fr
-                        ? "le paramètre \"" + p_param_name + "\" doit être compris entre " + std::to_string(min) + " et " + std::to_string(max) + " mais a reçu " + arg_value + " dans la fonction \"" + p_function + "\""
-                        : "parameter \"" + p_param_name + "\" must be between " + std::to_string(min) + " and " + std::to_string(max) + " but received " + arg_value + " in function \"" + p_function + "\"") {}
+                        ? "dans " + p_function + " : le paramètre \"" + p_param_name + "\" doit être compris entre " + std::to_string(min) + " et " + std::to_string(max) + " mais a reçu " + arg_value
+                        : "in function " + p_function + ": parameter \"" + p_param_name + "\" must be between " + std::to_string(min) + " and " + std::to_string(max) + " but received " + arg_value) {}
                 virtual ~ValueOutOfRangeException() throw() {}
                 virtual const char* what()    const throw() { return description.c_str(); }
             private:
@@ -392,8 +392,8 @@ class Parameters {
             public:
                 UnknownChoiceException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG lang) throw():
                     description(lang==lang_fr
-                        ? "le choix \"" + arg_value + "\" pour le paramètre \"" + p_param_name + "\" n'est pas disponible dans la fonction \"" + p_function + "\""
-                        : "choice \"" + arg_value + "\" for parameter \"" + p_param_name + "\" is not available in function \"" + p_function + "\"") {}
+                        ? "dans " + p_function + " : le choix \"" + arg_value + "\" pour le paramètre \"" + p_param_name + "\" n'est pas disponible"
+                        : "in function " + p_function + ": choice \"" + arg_value + "\" for parameter \"" + p_param_name + "\" is not available") {}
                 virtual ~UnknownChoiceException() throw() {}
                 virtual const char* what()    const throw() { return description.c_str(); }
             private:
