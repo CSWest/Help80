@@ -330,8 +330,8 @@ class Parameters {
             public:
                 DynamicCastFailedException(const std::string& p_param_name, const std::string& p_function, LANG p_lang) throw():
                     description(p_lang==lang_fr
-                        ? "dans " + p_function + " : le reinterpret_cast sur le paramètre \"" + p_param_name + "\" a échoué, vérifiez que l'argument de template correspond bien au type du paramètre"
-                        : "in function " + p_function + ": reinterpret_cast on parameter \"" + p_param_name + "\" failed, check that template argument matches the parameter's type") {}
+                        ? "dans " + p_function + " : le dynamic_cast sur le paramètre \"" + p_param_name + "\" a échoué, vérifiez que l'argument de template correspond bien au type du paramètre"
+                        : "in function " + p_function + ": dynamic_cast on parameter \"" + p_param_name + "\" failed, check that template argument matches the parameter's type") {}
                 virtual ~DynamicCastFailedException() throw() {}
                 virtual const char* what()            const throw() { return description.c_str(); }
             private:

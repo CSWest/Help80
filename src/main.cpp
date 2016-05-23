@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
         p.define_num_str_param<long int>("long_int", {"value"}, {0}, "If there is_a_really_long_word_that_would_fit_on_the_next_line it goes on the next line.");
         p.define_num_str_param<unsigned long int>("unsigned_long_int", {"value"}, {0}, "Another parameter.");
         p.define_num_str_param<long long int>("long_long_int", {"value"}, {0}, "Another parameter.");
-        p.define_num_str_param<unsigned long long int>("unsigned_long_long_int", {"value"}, {0}, "In C++, data types are declarations for memory locations or variables that determine the characteristics of the data that may be stored and the methods (operations) of processing that are permitted involving them. From Wikipedia.");
+        p.define_num_str_param<unsigned long long int>("unsigned_long_long_int", {"value"}, {0}, "In C++, data types are declarations for memory locations or variables that determine the characteristics of the data that may be stored and the methods of processing that are permitted involving them.");
         p.define_num_str_param<float>("float", {"value"}, {0}, "In computing, floating point is the formulaic representation that approximates a real number so as to support a trade-off between range and precision. Well said.");
         p.define_num_str_param<double>("double", {"value"}, {0}, "Double.");
         p.define_num_str_param<long double>("long_double", {"value"}, {0}, "Last.");
@@ -83,7 +83,7 @@ int main(int argc, char** argv) {
     /* print help and stop if help is required */
     if(p.is_spec("help") || argc==1) {
         p.print_help();
-        //return 0;
+        return 0;
     }
     
     /* retrieve values */
