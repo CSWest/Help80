@@ -41,16 +41,16 @@ int main(int argc, char** argv) {
     try {
         p.insert_subsection("FIRST SUBSECTION");
         p.define_param("help", "Displays this help.");
-        p.define_num_str_param<int>("parameter", {"value"}, {80}, "This parameter would allow the user to set the value for parameter. The default value, 80, is automatically printed under this short description since the function is called with optional parameter 'display_default_value' set to true. This description, although longer than 80 characters, keeps a nice appearence in the help menu.", true);
-        p.define_num_str_param<double>("multiple", {"v1", "v2", "v3"}, {0.5, 0.7, 10}, "This parameter expects three values. Since the parameter's name and the list of values is a long string, this description paragraph is printed on a new line. Default values are defined but aren't listed below.");
-        p.define_choice_param("mode", "choice", "second_mode",
+        p.define_num_str_param<int>("int_parameter", {"value"}, {80}, "This parameter would allow the user to set the value for parameter. The default value, 80, is automatically printed under this short description since the function is called with optional parameter 'display_default_value' set to true. This description, although longer than 80 characters, keeps a nice appearence in the help menu.", true);
+        p.define_num_str_param<double>("multiple_value", {"v1", "v2", "v3"}, {0.5, 0.7, 10}, "This parameter expects three values. Since the parameter's name and the list of values is a long string, this description paragraph is printed on a new line. Default values are defined but aren't listed below.");
+        p.define_choice_param("multiple_choice", "choice", "second_mode",
                                  {{"first_mode", "This mode is the first available mode. The description of the choices also fits in the terminal."},
                                   {"second_mode", "This mode is another available mode. This is the default mode, as printed just below."},
                                   {"third_mode", "The third mode. If there_is_a_really_long_word_that_wouldnt_fit_on_one_line_it_is_split_at_the_end_of_this_line_and_this_works_on_multiple_lines."},
                                   {"fourth_mode_super_super_long", "Last one. If there_is_a_long_word_that_would fit on the next line, it goes on the next line."}},
                               "You can also define multiple choices parameters. You need to give the multiple choices in an array of pairs (choice, choice_description):", true);
         p.define_param("simple_parameter", "This parameter doesn't expect any value.");
-        p.define_num_str_param<std::string>("path", {"folder"}, {"./"}, "This parameter expects a std::string.", true);
+        p.define_num_str_param<std::string>("string_path", {"folder"}, {"./"}, "This parameter expects a std::string.", true);
         
         /* new subsection */
         p.insert_subsection("SECOND SUBSECTION");
@@ -88,16 +88,15 @@ int main(int argc, char** argv) {
     
     /* retrieve values */
     try {
-        std::cout << std::endl;
         std::cout << "FIRST SUBSECTION:" << std::endl;
         std::cout << "   help:             " << p.is_spec("help") << std::endl;
-        std::cout << "   parameter:        " << p.num_val<int>("parameter") << std::endl;
-        std::cout << "   multiple:         " << p.num_val<double>("multiple", 1) << ", "
-                                             << p.num_val<double>("multiple", 2) << ", "
-                                             << p.num_val<double>("multiple", 3) << std::endl;
-        std::cout << "   mode:             \"" << p.cho_val("mode") << "\"" << std::endl;
+        std::cout << "   int_parameter:    " << p.num_val<int>("int_parameter") << std::endl;
+        std::cout << "   multiple_value:   " << p.num_val<double>("multiple_value", 1) << ", "
+                                             << p.num_val<double>("multiple_value", 2) << ", "
+                                             << p.num_val<double>("multiple_value", 3) << std::endl;
+        std::cout << "   multiple_choice:  \"" << p.cho_val("multiple_choice") << "\"" << std::endl;
         std::cout << "   simple_parameter: " << p.is_spec("simple_parameter") << std::endl;
-        std::cout << "   path:             " << p.str_val("path") << std::endl;
+        std::cout << "   string_path:      " << p.str_val("string_path") << std::endl;
         std::cout << std::endl;
         
         std::cout << "SECOND SUBSECTION:" << std::endl;
