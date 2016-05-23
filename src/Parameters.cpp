@@ -29,8 +29,9 @@ Parameters::Parameters(const int p_argc, char const* const* const p_argv, config
     argc(p_argc),
     argv(p_argv),
 
+    min_terminal_width(p_c.min_terminal_width),
     max_terminal_width(p_c.max_terminal_width),
-    terminal_width(get_terminal_width()<=max_terminal_width ? get_terminal_width() : max_terminal_width),
+    terminal_width(get_terminal_width()<=max_terminal_width ? (get_terminal_width()>=min_terminal_width ? get_terminal_width() : min_terminal_width) : max_terminal_width),
     param_to_desc_len(p_c.param_to_desc_len),
     desc_indent_len(p_c.desc_indent_len),
     params_indent_len(p_c.params_indent_len),
@@ -53,6 +54,7 @@ Parameters::Parameters(const int p_argc, char const* const* const p_argv, config
     argc(p_argc),
     argv(p_argv),
 
+    min_terminal_width(p_c.min_terminal_width),
     max_terminal_width(p_c.max_terminal_width),
     terminal_width(p_terminal_width<=max_terminal_width ? p_terminal_width : max_terminal_width),
     param_to_desc_len(p_c.param_to_desc_len),

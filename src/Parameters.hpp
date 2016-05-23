@@ -139,6 +139,7 @@ class Parameters {
         enum LANG {lang_fr, lang_us};
     
         struct config {
+            const int min_terminal_width;                                                  // min width of terminal
             const int max_terminal_width;                                                  // max width of terminal
             const int params_indent_len;                                                   // nb of characters from the left to print param+values
             const int param_to_desc_len;                                                   // nb of spaces between longest param list and descripton
@@ -196,6 +197,7 @@ class Parameters {
         char const* const* const  argv;                                                    // command line args values
     
         /* display parameters */
+        const int                 min_terminal_width;                                      // max width of the terminal
         const int                 max_terminal_width;                                      // max width of the terminal
         const int                 terminal_width;                                          // the width of the terminal
         const int                 param_to_desc_len;                                       // nb of spaces between longest param list and descripton
