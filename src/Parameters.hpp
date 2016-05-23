@@ -125,6 +125,7 @@ FILE
 #include <limits>
 #include <map>
 #include <set>
+#include <sstream>
 #include <vector>
 
 class Parameters {
@@ -375,16 +376,17 @@ class Parameters {
         class ValueOutOfRangeException: public std::exception {
             public:
                 ValueOutOfRangeException(std::string const& p_param_name, const std::string& arg_value, const std::string& p_function, LANG lang) throw():
-                    min(std::numeric_limits<T>::min()),
-                    max(std::numeric_limits<T>::max()),
+                    min(nb_to_string(std::numeric_limits<T>::min())),
+                    max(nb_to_string(std::numeric_limits<T>::max())),
                     description(lang==lang_fr
-                        ? "dans " + p_function + " : le paramètre \"" + p_param_name + "\" doit être compris entre " + std::to_string(min) + " et " + std::to_string(max) + " mais a reçu " + arg_value
-                        : "in function " + p_function + ": parameter \"" + p_param_name + "\" must be between " + std::to_string(min) + " and " + std::to_string(max) + " but received " + arg_value) {}
+                        ? "dans " + p_function + " : le paramètre \"" + p_param_name + "\" doit être compris entre " + min + " et " + max + " mais a reçu " + arg_value
+                        : "in function " + p_function + ": parameter \"" + p_param_name + "\" must be between " + min + " and " + max + " but received " + arg_value) {}
                 virtual ~ValueOutOfRangeException() throw() {}
                 virtual const char* what()    const throw() { return description.c_str(); }
             private:
-                T min;
-                T max;
+                const std::string nb_to_string(T nb) { std::ostringstream oss; oss << nb; return oss.str(); }
+                const std::string min;
+                const std::string max;
                 const std::string description;
         };
 
