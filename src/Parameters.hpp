@@ -63,6 +63,8 @@ FILE
         - UnknownParameterException: when there is an unknown parameter in the command line
         - UndefinedParameterException: when the developer tries to retrieve value for a parameter
                                        that doesn't exist
+        - DynamicCastFailedException: when a dynamic_cast returns a null pointer. This happens in
+                                      a call to num_val with wrong template type for instance
     
  
     How to build the menu:
@@ -156,10 +158,10 @@ class Parameters {
     
         /* use of parameters */
         template<typename T>
-        const T                   num_val(const std::string&, const int=1) const;          // return n-th value for parameter. nb starts at 1
-        const std::string         str_val(const std::string&, const int=1) const;          // return n-th value for parameter. nb starts at 1
-        const std::string         cho_val(const std::string&)              const;          // returns choice value
-        const bool                is_spec(const std::string&)              const;          // tells if parameters is defined
+        const T                   num_val(const std::string&, const int=1)     const;      // return n-th value for parameter. nb starts at 1
+        const std::string         str_val(const std::string&, const int=1)     const;      // return n-th value for parameter. nb starts at 1
+        const std::string         cho_val(const std::string&)                  const;      // returns choice value
+        const bool                is_spec(const std::string&)                  const;      // tells if parameters is defined
         void                      parse_params();                                          // reads cmd line and store args
     
         /* help menu */

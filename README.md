@@ -111,6 +111,7 @@ Exception | Meaning
 `UnsupportedParameterTypeException` | Thrown when you try to create a parameter of (so far) unsupported type.
 `DuplicateParameterException` | Thrown when you try to create a parameter with an already existing name.
 `UndefinedParameterException` | Thrown When you try to retrieve value for a parameter that doesn't exist.
+`DynamicCastFailedException`  | Thrown when calling `num_val` with the wrong template type argument, or when a `dynamic_cast` fails.
 
 ***
 
