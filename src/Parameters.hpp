@@ -128,6 +128,7 @@ FILE
 #include <map>
 #include <set>
 #include <sstream>
+#include <typeinfo>
 #include <vector>
 
 class Parameters {
