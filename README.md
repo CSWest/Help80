@@ -49,17 +49,17 @@ When the object is created, you can start defining parameters. This will automat
 #### Specify the parameters
         
 First you can specify a description of your program, and how to use it with the functions:
-* `set_program_description(const std::string&)`
-* `set_usage(const std::string&)`
+* `void set_program_description(const std::string&)`
+* `void set_usage(const std::string&)`
  
 Then you can use the following functions to define your program's parameters:
 
-##### `define_param`
+##### `void define_param`
 To define a parameter that doesn't need any value. This function takes two arguments, listed below:
   1. `const std::string&`: the parameter's name.
   1. `const std::string&`: its description.
 
-##### `define_num_str_param`
+##### `void define_num_str_param`
 To define a numeric or `std::string` parameter:
   1. `const std::string&`: the parameter's name.
   1. `const std::vector<std::string>&`: the name of the associated values. This is what will be written between `<` and `>`, like `<value1>` next to the parameter's name.
@@ -67,7 +67,7 @@ To define a numeric or `std::string` parameter:
   1. `const std::string&`: the parameter's description.
   1. `const bool=false`: specifies if the default value has to be printed. This will mean to the user that if he does not specify this argument, the default value will be used.
 
-##### `define_choice_param`
+##### `void define_choice_param`
 To define a multiple choice parameter. This is a parameter that can only take a finite set of (`std::string`) values:
   1. `const std::string&`: the parameter's name.
   1. `const std::string&`: the name of the associated value.
@@ -76,20 +76,20 @@ To define a multiple choice parameter. This is a parameter that can only take a 
   1. `const std::string&`: the parameter's decription.
   1. `const bool`: specifies if the default choice has to be printed.
 
-The order in which you define the parameters will be the same as the order of the parameters on the help menu. You can add structure by adding subsections between parameters with function `insert_subsection(const std::string&)`.
+The order in which you define the parameters will be the same as the order of the parameters on the help menu. You can add structure by adding subsections between parameters with function `void insert_subsection(const std::string&)`.
 
-When the menu is ready, you can print it with if you wish with `print_help()`. This function is usually only called when asked by the user though.
+When the menu is ready, you can print it with if you wish with `void print_help()`. This function is usually only called when asked by the user though.
         
 #### Get the entered values
 
-So far, the parameters have only been defined. After a call to `parse_params()` the command line arguments will be parsed and the parameter's values will be updated from their default value to the one provided by the user. If no exception is thrown so far, the command line is correct. You can then use the following functions to retrieve the parameters' values:
+So far, the parameters have only been defined. After a call to `void parse_params()` the command line arguments will be parsed and the parameter's values will be updated from their default value to the one provided by the user. If no exception is thrown so far, the command line is correct. You can then use the following functions to retrieve the parameters' values:
 
 function | description
 -------- | -----------
-`is_spec(const std::string&)` | To know if a simple parameter is specified.
-`num_val(const std::string&, const int=1)` | To get the n-th numeric value of a numeric parameter. The first one is accessed with index 1, the default value.
-`str_val(const std::string&, const int=1)` | To get the value of a `std::string` parameter. The first one is accessed with index 1, the default value.
-`cho_val(const std::string&)` | To get the value of a multiple choice parameter.
+`const bool is_spec(const std::string&)` | To know if a simple parameter is specified.
+`const T num_val(const std::string&, const int=1)` | To get the n-th numeric value of a numeric parameter. The first one is accessed with index 1, the default value.
+`const std::string str_val(const std::string&, const int=1)` | To get the value of a `std::string` parameter. The first one is accessed with index 1, the default value.
+`const std::string cho_val(const std::string&)` | To get the value of a multiple choice parameter.
 
 #### Catch the following exceptions
 
