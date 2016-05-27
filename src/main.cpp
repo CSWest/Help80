@@ -30,18 +30,18 @@ LICENSE
 int main(int argc, char** argv) {
 
     /* create object */
-    Parameters::config p_c {40, 80, 3, 1, 23, 5, 3, 2, Parameters::lang_us};
+    Parameters::config p_c {40, 80, 3, 1, 27, 5, 3, 2, Parameters::lang_us};
     Parameters p(argc, argv, p_c);
     
     /* set program description and usage */
-    p.set_program_description("These classes are a set of tools for the management of command line arguments. By using these classes in your project, you do not need to worry about designing a help menu or about retrieving the parameters' values anymore. Everything is handled by the class Parameters and its functions, and make sure your menu looks nice even in 80-characters-wide terminals.");
+    p.set_program_description("These classes are a set of tools for the management of command line arguments. By using these classes in your project, you do not need to worry about designing a help menu or about retrieving the parameters' values anymore. Everything is handled by the class Parameters and its functions, and make sure your menu looks nice even in 80-characters-wide terminals.\nYou can also write the license here.");
     p.set_usage("software --width <value>");
     
     /* irst subsection */
     try {
         p.insert_subsection("FIRST SUBSECTION");
         p.define_param("help", "Displays this help.");
-        p.define_num_str_param<int>("int_parameter", {"value"}, {80}, "This parameter would allow the user to set the value for parameter. The default value, 80, is automatically printed under this short description since the function is called with optional parameter 'display_default_value' set to true. This description, although longer than 80 characters, keeps a nice appearence in the help menu.", true);
+        p.define_num_str_param<int>("int_parameter", {"value"}, {80}, "Numeric parameter.\nThis parameter would allow the user to set the value for parameter. The default value, 80, is automatically printed under this short description since the function is called with optional parameter 'display_default_value' set to true. This description, although longer than 80 characters, keeps a nice appearence in the help menu.", true);
         p.define_num_str_param<double>("multiple_value", {"v1", "v2", "v3"}, {0.5, 0.7, 10}, "This parameter expects three values. Since the parameter's name and the list of values is a long string, this description paragraph is printed on a new line. Default values are defined but aren't listed below.");
         p.define_choice_param("multiple_choice", "choice", "second_mode",
                                  {{"first_mode", "This mode is the first available mode. The description of the choices also fits in the terminal."},
@@ -59,8 +59,8 @@ int main(int argc, char** argv) {
         p.define_num_str_param<int>("int", {"value"}, {0}, "If there is_a_really_long_word_that_wouldnt_fit_on_one_line_it_is_split_at_the_end_of_this_line_and_this_works_on_multiple_lines.");
         p.define_num_str_param<unsigned int>("unsigned_int", {"value"}, {0}, "If there is_a_really_long_word_that_would_fit_on_the_next_line it goes on the next line.");
         p.define_num_str_param<long int>("long_int", {"value"}, {0}, "If there is_a_really_long_word_that_would_fit_on_the_next_line it goes on the next line.");
-        p.define_num_str_param<unsigned long int>("unsigned_long_int", {"value"}, {0}, "Another parameter.");
-        p.define_num_str_param<long long int>("long_long_int", {"value"}, {0}, "Another parameter.");
+        p.define_num_str_param<unsigned long int>("unsigned_long_int", {"value"}, {0}, "If_there_is_a_really_long_word_that_wouldnt_fit_on_one_line_it_is_split_at_the_end_of_this_line_and_this_works_on_multiple_lines.");
+        p.define_num_str_param<long long int>("long_long_int", {"value"}, {0}, "If_there_is_a_really_long_word_that_wouldnt_fit_on_one_line_it_is_split_at_the_end_of_this_line_and_this_works_on_multiple_lines.");
         p.define_num_str_param<unsigned long long int>("unsigned_long_long_int", {"value"}, {0}, "In C++, data types are declarations for memory locations or variables that determine the characteristics of the data that may be stored and the methods of processing that are permitted involving them.");
         p.define_num_str_param<float>("float", {"value"}, {0}, "In computing, floating point is the formulaic representation that approximates a real number so as to support a trade-off between range and precision. Well said.");
         p.define_num_str_param<double>("double", {"value"}, {0}, "Double.");
