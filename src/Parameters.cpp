@@ -32,21 +32,22 @@ Parameters::Parameters(const int p_argc, char const* const* const p_argv, config
     min_terminal_width(p_c.min_terminal_width),
     max_terminal_width(p_c.max_terminal_width),
     terminal_width(get_terminal_width()<=max_terminal_width ? (get_terminal_width()>=min_terminal_width ? get_terminal_width() : min_terminal_width) : max_terminal_width),
+    params_indent_len(p_c.params_indent_len),
     param_to_desc_len(p_c.param_to_desc_len),
     desc_indent_len(p_c.desc_indent_len),
-    params_indent_len(p_c.params_indent_len),
     choice_indent_len(p_c.choice_indent_len),
     choice_desc_indent_len(p_c.choice_desc_indent_len),
     right_margin_len(p_c.right_margin_len),
+    params_indent(""),
     desc_indent(""),
     choice_indent(""),
-    params_indent(""),
+    choice_desc_indent(""),
 
     lang(p_c.lang),
     description_is_set(false) {
     for(int i=0 ; i<params_indent_len ; i++)      params_indent += " ";
-    for(int i=0 ; i<choice_indent_len ; i++)      choice_indent += " ";
     for(int i=0 ; i<desc_indent_len ; i++)        desc_indent += " ";
+    for(int i=0 ; i<choice_indent_len ; i++)      choice_indent += " ";
     for(int i=0 ; i<choice_desc_indent_len ; i++) choice_desc_indent += " ";
 }
 
@@ -57,21 +58,23 @@ Parameters::Parameters(const int p_argc, char const* const* const p_argv, config
     min_terminal_width(p_c.min_terminal_width),
     max_terminal_width(p_c.max_terminal_width),
     terminal_width(p_terminal_width<=max_terminal_width ? p_terminal_width : max_terminal_width),
+    params_indent_len(p_c.params_indent_len),
     param_to_desc_len(p_c.param_to_desc_len),
     desc_indent_len(p_c.desc_indent_len),
-    params_indent_len(p_c.params_indent_len),
     choice_indent_len(p_c.choice_indent_len),
     choice_desc_indent_len(p_c.choice_desc_indent_len),
     right_margin_len(p_c.right_margin_len),
+    params_indent(""),
     desc_indent(""),
     choice_indent(""),
-    params_indent(""),
+    choice_desc_indent(""),
 
     lang(p_c.lang),
     description_is_set(false) {
-    for(int i=0 ; i<params_indent_len ; i++) params_indent += " ";
-    for(int i=0 ; i<choice_indent_len ; i++) choice_indent += " ";
-    for(int i=0 ; i<desc_indent_len ; i++)   desc_indent += " ";
+    for(int i=0 ; i<params_indent_len ; i++)      params_indent += " ";
+    for(int i=0 ; i<desc_indent_len ; i++)        desc_indent += " ";
+    for(int i=0 ; i<choice_indent_len ; i++)      choice_indent += " ";
+    for(int i=0 ; i<choice_desc_indent_len ; i++) choice_desc_indent += " ";
 }
 
 Parameters::~Parameters() {
@@ -175,13 +178,15 @@ void Parameters::print_text(const std::string& text, const bool start_on_new_lin
         std::string value_num_str = word.substr(2);
         int         value_num     = stoi(value_num_str);
         if(value_num>0) {
-            word = "<" + underline(p->values_names.at(value_num-1)) + ">";
+            if(word.size()>3) word = "<" + underline(p->values_names.at(value_num-1)) + ">" + word.substr(3);
+            else              word = "<" + underline(p->values_names.at(value_num-1)) + ">";
             #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
                 in_par_val = true;
             #endif
         }
         else {
-            word = "\"" + bold(p->name) + "\"";
+            if(word.size()>3) word = "\"" + bold(p->name) + "\"" + word.substr(3);
+            else              word = "\"" + bold(p->name) + "\"";
         }
     };
     /* for each character in the text */
