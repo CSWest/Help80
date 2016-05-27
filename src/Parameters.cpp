@@ -169,12 +169,20 @@ void Parameters::print_text(const std::string& text, const bool start_on_new_lin
     bool        first_line = true;
     bool        first_word = true;
     int         word_pad   = 0;     // used when replacing $_x by value name
+    bool        in_par_val = false;
     /* lambda function to replace $_x by value name */
-    auto replace_by_value_name = [&word, &p] () {
+    auto replace_by_value_name = [&word, &p, &in_par_val] () {
         std::string value_num_str = word.substr(2);
         int         value_num     = stoi(value_num_str);
-        if(value_num>0) word = "<" + underline(p->values_names.at(value_num-1)) + ">";
-        else            word = "\"" + bold(p->name) + "\"";
+        if(value_num>0) {
+            word = "<" + underline(p->values_names.at(value_num-1)) + ">";
+            #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
+                in_par_val = true;
+            #endif
+        }
+        else {
+            word = "\"" + bold(p->name) + "\"";
+        }
     };
     /* for each character in the text */
     for(std::size_t j=0 ; j<text.length() ; j++) {
@@ -187,13 +195,17 @@ void Parameters::print_text(const std::string& text, const bool start_on_new_lin
             /* text decoration */
             if(word.find("$_")==0) {
                 replace_by_value_name();
-                word_pad = 8;
+                #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
+                    word_pad = 8;
+                #endif
             }
             else if(word.find("$p(")==0) {
                 std::size_t end_ind = word.find(")");
                 if(word.at(word.length()-1)!=')') word = "\"--" + bold(word.substr(3, end_ind-3)) + "\"" + bold(word.substr(end_ind+1));
                 else                              word = "\"--" + bold(word.substr(3, end_ind-3)) + "\"";
-                word_pad = 8;
+                #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
+                    word_pad = 8;
+                #endif
             }
             /* display word */
             if(indent_len+static_cast<int>(line.length()+word.length())-word_pad+1<=terminal_width-right_margin_len) {
@@ -233,14 +245,19 @@ void Parameters::print_text(const std::string& text, const bool start_on_new_lin
                     else         { line_len = 0; }
                     int ind = terminal_width-(right_margin_len+indent_len+line_len);
                     if(ind<0) ind=0;
-                    std::cout << word.substr(word_pad/2, word_pad/2 + static_cast<std::size_t>(ind)) << std::endl;
-                    word = word.substr(word_pad/2 + static_cast<std::size_t>(ind));
+                    std::cout << word.substr(0, static_cast<std::size_t>(word_pad/2 + ind));
+                    /* disable underline */
+                    if(in_par_val) std::cout << "\e[0m";
+                    std::cout << std::endl;
+                    if(in_par_val) { word = "\e[4m" + word.substr(static_cast<std::size_t>(word_pad/2 + ind)); word_pad = 4; }
+                    else           { word = word.substr(static_cast<std::size_t>(word_pad/2 + ind)); }
                     word.push_back(c);
                     line       = "";
                     first_word = true;
                 }
             }
-            word_pad = 0;
+            if(word_pad==8) word_pad   = 0;
+            in_par_val = false;
         }
     }
     /* print last line */
