@@ -170,7 +170,7 @@ void Parameters::print_text(const std::string& text, const bool start_on_new_lin
     bool        first_word = true;
     for(std::size_t j=0 ; j<text.length() ; j++) {
         char c = text.at(j);
-        if(c!=' ' && indent_len+static_cast<int>(word.length())<terminal_width-right_margin_len) {
+        if(c!=' ' && c!= '\n' && indent_len+static_cast<int>(word.length())<terminal_width-right_margin_len) {
             /* we are in a middle of a word and we still have space so far */
             word += c;
         }
@@ -186,7 +186,9 @@ void Parameters::print_text(const std::string& text, const bool start_on_new_lin
                 else {
                     if(first_word) { line = word; first_word = false; }
                     else           { line += " " + word; }
-                    std::cout << indent << line << std::endl;
+                    if(!first_line || start_on_new_line) std::cout << indent;
+                    if(first_line)                       first_line = false;
+                    std::cout << line << std::endl;
                     first_word = true;
                     line       = "";
                     word       = "";
