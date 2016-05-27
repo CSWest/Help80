@@ -191,6 +191,7 @@ class Parameters {
         static const std::string  bold(const std::string&);                                // returns the bold version of str
         static const std::string  underline(const std::string&);                           // returns the underlined version of str
         template<typename T> void pr_def(ParamHolder* const, const bool=false) const;      // prints default value
+        void                      print_text(const std::string&, const bool, const int, const std::string&)   const;      // printing method
         void                      print_description()                          const;      // print program description
         void                      print_usage()                                const;      // print usage
         void                      print_parameters()                           const;      // print list of parameters
@@ -203,16 +204,16 @@ class Parameters {
         const int                 min_terminal_width;                                      // max width of the terminal
         const int                 max_terminal_width;                                      // max width of the terminal
         const int                 terminal_width;                                          // the width of the terminal
+        const int                 params_indent_len;                                       // nb of characters from the left to print param+values
         const int                 param_to_desc_len;                                       // nb of spaces between longest param list and descripton
         const int                 desc_indent_len;                                         // nb of characters form the left to print desccription
-        const int                 params_indent_len;                                       // nb of characters from the left to print param+values
         const int                 choice_indent_len;                                       // indentation for choices
         const int                 choice_desc_indent_len;                                  // indentation for choices descriptions
         const int                 right_margin_len;                                        // nb of chars from the right of the terminal
+        std::string               params_indent;                                           // string of 'params_indent_len' spaces
         std::string               desc_indent;                                             // spaces for indentation of big description
         std::string               choice_indent;                                           // indentation for choices descriptions
-        std::string               params_indent;                                           // string of 'params_indent_len' spaces
-        std::string               choice_desc_indent;                                           // string of 'params_indent_len' spaces
+        std::string               choice_desc_indent;                                      // string of 'params_indent_len' spaces
     
         /* internal vars */
         const LANG                lang;                                                    // language to print the menu in
