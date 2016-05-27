@@ -120,7 +120,7 @@ Exception | Meaning
 In the description of the program, the parameters or the choices, you can use the following combinations:
 * `$p(text)` will be replaced by *text*, prefixed by `--` and surrounded by double quotes `"`, in bold: "**--text**". This is useful to refer in other parameters in a description. Do not use that command, but the following one instead, to refer to the parameter this description is refering to.
 * `$_0` will be replaced by the name of the parameter the description refers to, prefixed by `--` and surrounded by double quotes `"`, in bold: "**--parameter_name**".
-* `$_n` will be replaced by the name of the n-th parameter's value surrounded by `<` and `>`: *<parameter_name>*.
+* `$_n` will be replaced by the name of the n-th parameter's value surrounded by `<` and `>`: *\<parameter_name\>*.
 
 ***
 
