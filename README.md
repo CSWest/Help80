@@ -8,7 +8,7 @@ The classes defined in this project can be used for parameters parsing and displ
 
 **Help80** allows you to:
 * parse the command line arguments
-* automatically design a help menu that fits the terminal's width
+* automatically design a help menu that fits the terminal's width, with bold parameters and underlined values for parameters
 * make sure all the input arguments respect the size of the built-in type you assign them to 
 
 Supported types:
@@ -112,6 +112,15 @@ Exception | Meaning
 `DuplicateParameterException` | Thrown when you try to create a parameter with an already existing name.
 `UndefinedParameterException` | Thrown When you try to retrieve value for a parameter that doesn't exist.
 `DynamicCastFailedException`  | Thrown when calling `num_val` with the wrong template type argument, or when a `dynamic_cast` fails.
+
+***
+
+### Text Decoration
+
+In the description of the program, the parameters or the choices, you can use the following combinations:
+* `$p(text)` will be replaced by *text*, prefixed by `--` and surrounded by double quotes `"`, in bold: **"--text"**. This is useful to refer in other parameters in a description. Do not use that command, but the following one instead, to refer to the parameter this description is refering to.
+* `$_0` will be replaced by the name of the parameter the description refers to, prefixed by `--` and surrounded by double quotes `"`, in bold: **"--parameter_name"**.
+* `$_n` will be replaced by the name of the n-th parameter's value surrounded by `<` and `>`: *<parameter_name>*.
 
 ***
 

@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
     Parameters p(argc, argv, p_c);
     
     /* set program description and usage */
-    p.set_program_description("These classes are a set of tools for the management of command line arguments. By using these classes in your project, you do not need to worry about designing a help menu or about retrieving the parameters' values anymore. Everything is handled by the class Parameters and its functions, and make sure your menu looks nice even in 80-characters-wide terminals.\nYou can also write the license here.");
+    p.set_program_description("These classes are a set of tools for the management of command line arguments. By using these classes in your project, you do not need to worry about designing a help menu or about retrieving the parameters' values anymore. Everything is handled by the class Parameters and its functions, and make sure your menu looks nice even in 80-characters-wide terminals.\n\nYou can also write the license here.");
     p.set_usage("software --width <value>");
     
     /* irst subsection */
@@ -42,14 +42,14 @@ int main(int argc, char** argv) {
         p.insert_subsection("FIRST SUBSECTION");
         p.define_param("help", "Displays this help.");
         p.define_num_str_param<int>("int_parameter", {"value"}, {80}, "Numeric parameter.\nThis parameter would allow the user to set the value for parameter. The default value, 80, is automatically printed under this short description since the function is called with optional parameter 'display_default_value' set to true. This description, although longer than 80 characters, keeps a nice appearence in the help menu.", true);
-        p.define_num_str_param<double>("multiple_value", {"v1", "v2", "v3"}, {0.5, 0.7, 10}, "This parameter expects three values. Since the parameter's name and the list of values is a long string, this description paragraph is printed on a new line. Default values are defined but aren't listed below.");
+        p.define_num_str_param<double>("multiple_value", {"v1", "v2", "v3"}, {0.5, 0.7, 10}, "Unlike parameter $p(int_parameter), this parameter expects three values. Since the parameter's name and the list of values is a long string, this description paragraph is printed on a new line. Default values are defined but aren't listed below. You can display the values like this: $_1 ($_1) for the first value.");
         p.define_choice_param("multiple_choice", "choice", "second_mode",
                                  {{"first_mode", "This mode is the first available mode. The description of the choices also fits in the terminal."},
                                   {"second_mode", "This mode is another available mode. This is the default mode, as printed just below."},
                                   {"third_mode", "The third mode. If there_is_a_really_long_word_that_wouldnt_fit_on_one_line_it_is_split_at_the_end_of_this_line_and_this_works_on_multiple_lines."},
                                   {"fourth_mode_super_super_long", "Last one. If there_is_a_long_word_that_would fit on the next line, it goes on the next line."}},
                               "You can also define multiple choices parameters. You need to give the multiple choices in an array of pairs (choice, choice_description):", true);
-        p.define_param("simple_parameter", "This parameter doesn't expect any value.");
+        p.define_param("simple_parameter", "Parameter $_0 doesn't expect any value.");
         p.define_num_str_param<std::string>("string_path", {"folder"}, {"./"}, "This parameter expects a std::string.", true);
         
         /* new subsection */

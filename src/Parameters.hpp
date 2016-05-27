@@ -191,10 +191,11 @@ class Parameters {
         static const std::string  bold(const std::string&);                                // returns the bold version of str
         static const std::string  underline(const std::string&);                           // returns the underlined version of str
         template<typename T> void pr_def(ParamHolder* const, const bool=false) const;      // prints default value
-        void                      print_text(const std::string&, const bool, const int, const std::string&)   const;      // printing method
         void                      print_description()                          const;      // print program description
         void                      print_usage()                                const;      // print usage
         void                      print_parameters()                           const;      // print list of parameters
+        void                      print_text(const std::string&, const bool, const int,
+                                       const std::string&, ParamHolder* const) const;      // printing method
     
         /* cmd line */
         const int                 argc;                                                    // command line args number

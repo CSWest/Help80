@@ -163,11 +163,20 @@ void Parameters::define_choice_param(const std::string& param_name, const std::s
 
 /*** display help menu ***/
 
-void Parameters::print_text(const std::string& text, const bool start_on_new_line, const int indent_len, const std::string& indent) const {
+void Parameters::print_text(const std::string& text, const bool start_on_new_line, const int indent_len, const std::string& indent, ParamHolder* const p) const {
     std::string line       = "";
     std::string word       = "";
     bool        first_line = true;
     bool        first_word = true;
+    int         word_pad   = 0;     // used when replacing $_x by value name
+    /* lambda function to replace $_x by value name */
+    auto replace_by_value_name = [&word, &p] () {
+        std::string value_num_str = word.substr(2);
+        int         value_num     = stoi(value_num_str);
+        if(value_num>0) word = "<" + underline(p->values_names.at(value_num-1)) + ">";
+        else            word = "\"" + bold(p->name) + "\"";
+    };
+    /* for each character in the text */
     for(std::size_t j=0 ; j<text.length() ; j++) {
         char c = text.at(j);
         if(c!=' ' && c!= '\n' && indent_len+static_cast<int>(word.length())<terminal_width-right_margin_len) {
@@ -175,7 +184,19 @@ void Parameters::print_text(const std::string& text, const bool start_on_new_lin
             word += c;
         }
         else {
-            if(indent_len+static_cast<int>(line.length()+word.length())+1<=terminal_width-right_margin_len) {
+            /* text decoration */
+            if(word.find("$_")==0) {
+                replace_by_value_name();
+                word_pad = 8;
+            }
+            else if(word.find("$p(")==0) {
+                std::size_t end_ind = word.find(")");
+                if(word.at(word.length()-1)!=')') word = "\"--" + bold(word.substr(3, end_ind-3)) + "\"" + bold(word.substr(end_ind+1));
+                else                              word = "\"--" + bold(word.substr(3, end_ind-3)) + "\"";
+                word_pad = 8;
+            }
+            /* display word */
+            if(indent_len+static_cast<int>(line.length()+word.length())-word_pad+1<=terminal_width-right_margin_len) {
                 /* if this word plus the previous space can fit, print it */
                 if(c!='\n') {
                     if(first_word) { line = word; first_word = false; }
@@ -198,7 +219,7 @@ void Parameters::print_text(const std::string& text, const bool start_on_new_lin
                 /* line would be too long, we need to go on next line */
                 if(!first_line || start_on_new_line) std::cout << indent;
                 if(first_line)                       first_line = false;
-                if(indent_len+static_cast<int>(word.length())<terminal_width-right_margin_len) {
+                if(indent_len+static_cast<int>(word.length())-word_pad<terminal_width-right_margin_len) {
                     /* the next word can fit on a line in its entirety, so print the current line and take a new line */
                     std::cout << line << std::endl;
                     line = word;
@@ -212,13 +233,14 @@ void Parameters::print_text(const std::string& text, const bool start_on_new_lin
                     else         { line_len = 0; }
                     int ind = terminal_width-(right_margin_len+indent_len+line_len);
                     if(ind<0) ind=0;
-                    std::cout << word.substr(0, static_cast<std::size_t>(ind)) << std::endl;
-                    word = word.substr(static_cast<std::size_t>(ind));
+                    std::cout << word.substr(word_pad/2, word_pad/2 + static_cast<std::size_t>(ind)) << std::endl;
+                    word = word.substr(word_pad/2 + static_cast<std::size_t>(ind));
                     word.push_back(c);
                     line       = "";
                     first_word = true;
                 }
             }
+            word_pad = 0;
         }
     }
     /* print last line */
@@ -237,7 +259,7 @@ void Parameters::print_description() const {
     if(lang==lang_fr) std::cout << bold("DESCRIPTION :") << std::endl;
     else              std::cout << bold("DESCRIPTION:") << std::endl;
     /* print description */
-    print_text(description, true, params_indent_len, params_indent);
+    print_text(description, true, params_indent_len, params_indent, nullptr);
 }
 
 void Parameters::print_usage() const {
@@ -285,7 +307,7 @@ void Parameters::print_parameters() const {
         }
         
         /* print description */
-        print_text(p->description, desc_on_new_line, desc_indent_len, desc_indent);
+        print_text(p->description, desc_on_new_line, desc_indent_len, desc_indent, p);
         
         /* print choices */
         if(choices_params.count(p->name)) {
@@ -295,7 +317,7 @@ void Parameters::print_parameters() const {
                 else              std::cout << desc_indent << choice_indent << "\"" << bold(pc.first) << "\":" << std::endl;
                 /* print choice description */
                 const std::string indent = desc_indent + choice_indent + choice_desc_indent;
-                print_text(pc.second, true, static_cast<int>(indent.size()), indent);
+                print_text(pc.second, true, static_cast<int>(indent.size()), indent, p);
             }
         }
         
